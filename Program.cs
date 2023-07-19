@@ -22,7 +22,7 @@ all_entities.Add(k);
 pb.Dock = DockStyle.Fill;
 form.Controls.Add(pb);
 
-int ticks = 15;
+int ticks = 17;
 fps.Ticks = ticks;
 System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer() {
     Interval = ticks

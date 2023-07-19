@@ -8,6 +8,7 @@ public abstract class Fighter : Entity
     protected int AnimationTimer { get; set; }
     public PointF Position { get; set; }
     public Size Size { get; set; }
+    public Frame Frame { get; set; }
     public Dictionary<AnimationName, List<Frame>> Frames { get; set; } = new Dictionary<AnimationName, List<Frame>>();
     public AnimationName AnimationName { get; set; } = AnimationName.Foward;
     public int AnimationFrame { get; set; } = 0;
@@ -19,6 +20,7 @@ public abstract class Fighter : Entity
     }
     public Bitmap Image { get; set; }
     public int Velocity { get; set; }
+    public FighterDirection Direction { get; set; } = FighterDirection.LEFT;
     public abstract void Update(Graphics g, TimeSpan t);
     public abstract void DrawDebug(Graphics g);
     public abstract void Draw(Graphics g);
@@ -29,6 +31,13 @@ public abstract class Fighter : Entity
             (float)(this.Position.X + (this.Velocity * t.TotalSeconds)),
             this.Position.Y
         ); 
+    }
+
+    public void ChangeX(Graphics g)
+    {
+        int directionValue = (int)(Direction);
+        g.TranslateTransform(this.Position.X * 2, 0);
+        g.ScaleTransform(-1, 1);
     }
 
 }

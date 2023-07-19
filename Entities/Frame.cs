@@ -7,7 +7,7 @@ public class Frame
     {
         PointInSpriteSheet = pointInSpriteSheet;
         Size = size;
-        if (originPoint != new Point(0, 0))
+        if (originPoint.X != 0 && originPoint.Y != 0)
             OriginPoint = originPoint;
         else
             OriginPoint = new Point(size.Width/2, size.Height);

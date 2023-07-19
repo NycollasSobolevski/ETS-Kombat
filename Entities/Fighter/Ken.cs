@@ -1,41 +1,60 @@
 using static Stage;
+using static FighterDirection;
 
 public class Ken : Fighter
 {
     public Ken()
     {
         this.Image =  new Bitmap("./Assets/Sprites/Guilherme.png");
-        this.Position = new Point(0, STAGE_FLOOR);
+        this.Position = new Point(500, STAGE_FLOOR);
         this.Size = new Size(300, 300);
-        this.Velocity = 75;
+        this.Velocity = 200;
         this.AnimationTimer = 1;
+        Direction = FighterDirection.LEFT;
 
         setFowardFrames();
+        setBackwardFrames();
+        
     }
 
     public override void Draw(Graphics g)
     {
-        var frame = Frames[AnimationName][AnimationFrame];
+        var container = g.BeginContainer();
+
+        Frame = Frames[AnimationName][AnimationFrame];
+
+        ChangeX(g);
+
         g.DrawImage(
             this.Image,
             new RectangleF(
-                this.Rectangle.X - frame.OriginPoint.X,
-                this.Rectangle.Y - frame.OriginPoint.Y,
+                this.Rectangle.X - Frame.OriginPoint.X,
+                this.Rectangle.Y - Frame.OriginPoint.Y,
                 this.Rectangle.Width,
                 this.Rectangle.Height
             ),
-            frame.ToRectangle(),
+            Frame.ToRectangle(),
             GraphicsUnit.Pixel
         );
 
+        g.EndContainer(container);
         this.DrawDebug(g);
     }
 
     public override void Update(Graphics g, TimeSpan t)
     {
         this.MoveX(t);
-        if (Position.X > 1920 || Position.X < 0)
+        if (Position.X > 1920 - this.Size.Width || Position.X < 0 + this.Size.Width)
+        {
             this.Velocity = -this.Velocity;
+
+            if (AnimationName == AnimationName.Foward)
+                this.AnimationName = AnimationName.Backward;
+    
+            else if (AnimationName == AnimationName.Backward)
+                this.AnimationName = AnimationName.Foward;
+
+        }
         
         if (DateTime.Now - lastFrame > TimeSpan.FromMilliseconds(60))
         {
@@ -49,13 +68,11 @@ public class Ken : Fighter
 
     public override void DrawDebug(Graphics g)
     {
-        var frame = Frames[AnimationName][AnimationFrame];
-
         g.FillRectangle(
             Brushes.Red,
             new RectangleF(
-                this.Rectangle.X - frame.OriginPoint.X - 5,
-                this.Rectangle.Y - frame.OriginPoint.Y - 5,
+                Rectangle.X + Frame.OriginPoint.X,
+                Rectangle.Y + Frame.OriginPoint.Y,
                 10,
                 10
             )
