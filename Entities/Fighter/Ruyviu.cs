@@ -163,7 +163,7 @@ public class Ruyviu : Fighter
         }
 
         this.Frames.Add(
-            States.Jump,
+            States.Crouch,
             frames
         );
     }
