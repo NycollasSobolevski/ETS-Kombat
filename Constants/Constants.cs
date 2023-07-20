@@ -1,16 +1,17 @@
 public static class Stage
 {
-    public static int STAGE_FLOOR = 900;
+    public static int STAGE_FLOOR = 500;
+    public static int FIGHTER_WIDTH = 50;
 }
 public enum FighterDirection
 {
     LEFT = -1,
     RIGHT = 1
 }
-public enum AnimationName
+public enum States
 {
-    Foward,
+    Forward,
     Backward,
     Jump,
-    Iddle
+    Idle
 }

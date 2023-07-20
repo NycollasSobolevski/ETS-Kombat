@@ -3,41 +3,91 @@
 
 public abstract class Fighter : Entity
 {
-    // Basic Functions of an entity
-    protected DateTime lastFrame = DateTime.Now;
-    protected int AnimationTimer { get; set; }
+    // *Basic Props
+    public Dictionary<States, List<Frame>> Frames { get; set; } = new Dictionary<States, List<Frame>>();
+    public States CurrentState { get; set; } = States.Backward;
+    public VelocityClass Velocity { get; set; } = new VelocityClass(0 ,0);
+    public FighterDirection Direction { get; set; } = FighterDirection.LEFT;
+    public int AnimationFrame { get; set; } = 0;
+    public Size ScreenSize;
+    public Bitmap Image { get; set; }
     public PointF Position { get; set; }
     public Size Size { get; set; }
+    public int Gravity { get; set; }
     public Frame Frame { get; set; }
-    public Dictionary<AnimationName, List<Frame>> Frames { get; set; } = new Dictionary<AnimationName, List<Frame>>();
-    public AnimationName AnimationName { get; set; } = AnimationName.Foward;
-    public int AnimationFrame { get; set; } = 0;
     public RectangleF Rectangle {
         get {
-            return new RectangleF(Position.X, Position.Y, Size.Width, Size.Height);
+            return new RectangleF(
+                Position.X + Frame.OriginPoint.X,
+                Position.Y - Frame.OriginPoint.Y,
+                Size.Width,
+                Size.Height
+            );
         }
         private set{ }
     }
-    public Bitmap Image { get; set; }
-    public int Velocity { get; set; }
-    public FighterDirection Direction { get; set; } = FighterDirection.LEFT;
+    protected DateTime lastFrame = DateTime.Now;
+    protected int AnimationTimer { get; set; }
+    
+    
+    // !FUNCTIONS
     public abstract void Update(Graphics g, TimeSpan t);
     public abstract void DrawDebug(Graphics g);
     public abstract void Draw(Graphics g);
-
-    public void MoveX(TimeSpan t)
+    public void Move(TimeSpan t)
     {
         this.Position = new PointF(
-            (float)(this.Position.X + (this.Velocity * t.TotalSeconds)),
-            this.Position.Y
+            (float)(this.Position.X + (this.Velocity.X * t.TotalSeconds)),
+            this.Position.Y + this.Velocity.Y
         ); 
     }
-
-    public void ChangeX(Graphics g)
+    public void UpdateStageConstraints()
     {
-        int directionValue = (int)(Direction);
-        g.TranslateTransform(this.Position.X * 2, 0);
-        g.ScaleTransform(-1, 1);
+        if (this.Position.X > ScreenSize.Width - Stage.FIGHTER_WIDTH)
+            this.Position = new PointF(ScreenSize.Width - Stage.FIGHTER_WIDTH, this.Position.Y);
+    
+        if (this.Position.X < 0 + Stage.FIGHTER_WIDTH)
+            this.Position = new PointF(Stage.FIGHTER_WIDTH, this.Position.Y);
+    }
+    public void ChangeState(States state)
+    {
+        switch(state)
+        {
+            case States.Backward:
+                handleWalkingLeft();
+                break;
+            case States.Forward:
+                handleWalkingRight();
+                break;
+            case States.Idle:
+                handleIdle();
+                break;
+            case States.Jump:
+                handleJump();
+                break;
+        }
     }
 
+    public void handleWalkingLeft()
+    {
+        this.Velocity.X = -150;
+        this.CurrentState = States.Backward;
+    }
+
+    public void handleWalkingRight()
+    {
+        this.Velocity.X = 150;
+        this.CurrentState = States.Forward;
+    }
+
+    public void handleIdle()
+    {
+        this.Velocity.X = 0;
+        this.CurrentState = States.Idle;
+    }
+    public void handleJump()
+    {
+        this.Velocity.Y = -450;
+        this.CurrentState = States.Jump;
+    }
 }
