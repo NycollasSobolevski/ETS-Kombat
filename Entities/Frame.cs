@@ -15,7 +15,11 @@ public class Frame
         if (originPoint.X != 0 && originPoint.Y != 0)
             OriginPoint = originPoint;
         else
-            OriginPoint = new Point((int)(size.Width * 1.5), (int)(size.Height * 2.8));
+            OriginPoint = new Point(
+                //! essa conta
+                Size.Width,
+                Size.Height * 2
+            );
     }
 
     public Rectangle ToRectangle()

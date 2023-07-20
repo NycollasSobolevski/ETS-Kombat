@@ -15,14 +15,14 @@ List<Entity> all_entities = new List<Entity>();
 FpsCounter fps = new FpsCounter();
 all_entities.Add(fps);
 
-Ken k = new Ken();
+Ruyviu k = new Ruyviu();
 all_entities.Add(k);
 //! Add to list
 
 pb.Dock = DockStyle.Fill;
 form.Controls.Add(pb);
 
-int ticks = 17;
+int ticks = 15;
 fps.Ticks = ticks;
 System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer() {
     Interval = ticks

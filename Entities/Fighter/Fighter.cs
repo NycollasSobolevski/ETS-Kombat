@@ -5,7 +5,7 @@ public abstract class Fighter : Entity
 {
     // *Basic Props
     public Dictionary<States, List<Frame>> Frames { get; set; } = new Dictionary<States, List<Frame>>();
-    public States CurrentState { get; set; } = States.Backward;
+    public States CurrentState { get; set; } = States.Idle;
     public VelocityClass Velocity { get; set; } = new VelocityClass(0 ,0);
     public FighterDirection Direction { get; set; } = FighterDirection.LEFT;
     public int AnimationFrame { get; set; } = 0;
@@ -13,7 +13,7 @@ public abstract class Fighter : Entity
     public Bitmap Image { get; set; }
     public PointF Position { get; set; }
     public Size Size { get; set; }
-    public int Gravity { get; set; }
+    public int Gravity { get; set; } = 0;
     public Frame Frame { get; set; }
     public RectangleF Rectangle {
         get {
@@ -28,6 +28,7 @@ public abstract class Fighter : Entity
     }
     protected DateTime lastFrame = DateTime.Now;
     protected int AnimationTimer { get; set; }
+    protected bool isJumping = false;
     
     
     // !FUNCTIONS
@@ -36,18 +37,26 @@ public abstract class Fighter : Entity
     public abstract void Draw(Graphics g);
     public void Move(TimeSpan t)
     {
+        this.Velocity.Y += (float)(this.Gravity * t.TotalSeconds);
         this.Position = new PointF(
             (float)(this.Position.X + (this.Velocity.X * t.TotalSeconds)),
-            this.Position.Y + this.Velocity.Y
+            (float)(this.Position.Y + this.Velocity.Y * t.TotalSeconds)
         ); 
     }
     public void UpdateStageConstraints()
     {
-        if (this.Position.X > ScreenSize.Width - Stage.FIGHTER_WIDTH)
-            this.Position = new PointF(ScreenSize.Width - Stage.FIGHTER_WIDTH, this.Position.Y);
+        if (this.Position.X > ScreenSize.Width - Stage.FIGHTER_WIDTH - this.Size.Width)
+            this.Position = new PointF(ScreenSize.Width - Stage.FIGHTER_WIDTH - this.Size.Width, this.Position.Y);
     
         if (this.Position.X < 0 + Stage.FIGHTER_WIDTH)
             this.Position = new PointF(Stage.FIGHTER_WIDTH, this.Position.Y);
+        
+        if (this.Position.Y > this.ScreenSize.Height - Stage.STAGE_FLOOR)
+        {
+            this.Position = new Point((int)this.Position.X, this.ScreenSize.Height - Stage.STAGE_FLOOR);
+            this.CurrentState = States.Idle;
+        }
+            
     }
     public void ChangeState(States state)
     {
@@ -65,29 +74,50 @@ public abstract class Fighter : Entity
             case States.Jump:
                 handleJump();
                 break;
+            case States.CrouchDown:
+                handleCrouchDown();
+                break;
+            case States.CrouchUp:
+                handleCrouchUp();
+                break;
         }
     }
 
     public void handleWalkingLeft()
     {
-        this.Velocity.X = -150;
+        this.Velocity.X = -250;
         this.CurrentState = States.Backward;
     }
-
     public void handleWalkingRight()
     {
-        this.Velocity.X = 150;
+        this.Velocity.X = 250;
         this.CurrentState = States.Forward;
     }
-
     public void handleIdle()
     {
         this.Velocity.X = 0;
+        this.Velocity.Y = 0;
+        this.Gravity = 0;
         this.CurrentState = States.Idle;
+        isJumping = false;
     }
     public void handleJump()
-    {
-        this.Velocity.Y = -450;
+    { 
+        if (!isJumping)
+        {
+            this.Velocity.Y = -800;
+            this.Gravity = 1000;
+            this.isJumping = true;
+        }
+
         this.CurrentState = States.Jump;
+    }
+    public void handleCrouchDown()
+    {
+        this.CurrentState = States.CrouchDown;
+    }
+    public void handleCrouchUp()
+    {
+        this.CurrentState = States.CrouchUp;
     }
 }

@@ -1,18 +1,19 @@
 using static Stage;
 
-public class Ken : Fighter
+public class Joe : Fighter
 {
-    public Ken()
+    public Joe()
     {
-        this.Image =  new Bitmap("./Assets/Sprites/Joe Sprites.png");
-        this.Position = new Point(500, STAGE_FLOOR);
-        this.Size = new Size(300, 300);
+        this.Image =  new Bitmap("./Assets/Sprites/Joe.png");
+        this.Position = new Point(500, 1080 - STAGE_FLOOR);
+        this.Size = new Size(200, 236);
         this.AnimationTimer = 1;
         Direction = FighterDirection.LEFT;
 
         setForwardFrames();
         setBackwardFrames();
         setIdleFrames();
+        setJumpingFrames();
     }
 
     public override void Draw(Graphics g)
@@ -66,31 +67,33 @@ public class Ken : Fighter
     //! ANIMATION FRAMES AND SPRITES
     void setForwardFrames()
     {
-        List<Frame> forward = new List<Frame>();
+        List<Frame> frames = new List<Frame>();
+        int row = 1;
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 5; i++)
         {
-            forward.Add(
+            frames.Add( 
                 new Frame(
-                    new Point(360 + (100 * i), 279),
-                    new Size(100, 100),
+                    new Point(360 + (100 * i), 179 + (118 * row)),
+                    new Size(100, 118),
                     new Point(0, 0)
                 )
             );
         }
 
-        this.Frames.Add(States.Forward, forward);
+        this.Frames.Add(States.Forward, frames);
     }
     void setBackwardFrames()
     {
-        List<Frame> backwardFrames = new List<Frame>();
+        List<Frame> frames = new List<Frame>();
+        int row = 2;
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 5; i++)
         {
-            backwardFrames.Add(
+            frames.Add(
                 new Frame(
-                    new Point(360 + (100 * i), 379),
-                    new Size(100, 100),
+                    new Point(360 + (100 * i), 179 + (118 * row)),
+                    new Size(100, 118),
                     new Point(0, 0)
                 )
             );
@@ -98,25 +101,49 @@ public class Ken : Fighter
 
         this.Frames.Add(
             States.Backward,
-            backwardFrames
+            frames
         );
     }
-
     void setIdleFrames()
     {
-        List<Frame> idle = new List<Frame>();
+        List<Frame> frames = new List<Frame>();
+        int row = 0;
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 5; i++)
         {
-            idle.Add(
+            frames.Add(
                 new Frame(
-                    new Point(360 + (100 * i), 179),
-                    new Size(100, 100),
+                    new Point(360 + (100 * i), 179 + (118 * row)),
+                    new Size(100, 118),
                     new Point(0, 0)
                 )
             );
         }
 
-        this.Frames.Add(States.Idle, idle);
+        this.Frames.Add(
+            States.Idle,
+            frames
+        );
+    }
+    void setJumpingFrames()
+    {
+        List<Frame> frames = new List<Frame>();
+        int row = 4;
+
+        for (int i = 0; i < 5; i++)
+        {
+            frames.Add(
+                new Frame(
+                    new Point(360 + (100 * i), 179 + (118 * row)),
+                    new Size(100, 118),
+                    new Point(0, 0)
+                )
+            );
+        }
+
+        this.Frames.Add(
+            States.Jump,
+            frames
+        );
     }
 }
