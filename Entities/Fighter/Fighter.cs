@@ -50,25 +50,45 @@ public abstract class Fighter : Entity
         if (this.Frame.HitBox != null)
             g.DrawRectangle(
                 Pens.Red,
-                (Rectangle)Frame.HitBox
+                new Rectangle(
+                    (int)Position.X,
+                    (int)Position.Y,
+                    (int)Frame.HitBox.Value.Width,
+                    (int)Frame.HitBox.Value.Height
+                )
             );
         
         if (this.Frame.HurtBox != null)
             g.DrawRectangle(
                 Pens.Blue,
-                (Rectangle)Frame.HurtBox
+                new Rectangle(
+                    (int)Position.X,
+                    (int)Position.Y,
+                    (int)Frame.HurtBox.Value.Width,
+                    (int)Frame.HurtBox.Value.Height
+                )
             );
         
         if (this.Frame.PushBox != null)
                 g.DrawRectangle(
                     Pens.Green,
-                    (Rectangle)Frame.PushBox
+                    new Rectangle(
+                    (int)Position.X,
+                    (int)Position.Y,
+                    (int)Frame.PushBox.Value.Width,
+                    (int)Frame.PushBox.Value.Height
+                )
                 );
 
         if (this.Frame.ThrowBox != null)
                 g.DrawRectangle(
                     Pens.Black,
-                    (Rectangle)Frame.ThrowBox
+                    new Rectangle(
+                    (int)Position.X,
+                    (int)Position.Y,
+                    (int)Frame.ThrowBox.Value.Width,
+                    (int)Frame.ThrowBox.Value.Height
+                )
                 );
         
         
