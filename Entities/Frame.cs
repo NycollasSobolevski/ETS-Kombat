@@ -4,10 +4,10 @@ public class Frame
     public Size Size { get; set; }
     public Point PointInSpriteSheet { get; set; }
     public Point OriginPoint { get; set; }
-    public RectangleF? PushBox { get; set; } 
-    public RectangleF? HitBox { get; set; } 
-    public RectangleF? ThrowBox { get; set; } 
-    public RectangleF? HurtBox { get; set; } 
+    public RectangleF PushBox { get; set; } 
+    public RectangleF HitBox { get; set; } 
+    public RectangleF ThrowBox { get; set; } 
+    public RectangleF HurtBox { get; set; } 
 
     public Frame(Point pointInSpriteSheet, Size size, Point originPoint)
     {
@@ -23,7 +23,7 @@ public class Frame
             );
     }
     public Frame(Point pointInSpriteSheet, Size size, Point originPoint,
-        RectangleF? hurtbox, RectangleF? hitbox, RectangleF? pushbox, RectangleF? throwbox)
+        RectangleF hurtbox, RectangleF hitbox, RectangleF pushbox, RectangleF throwbox)
     {
         PointInSpriteSheet = pointInSpriteSheet;
         Size = size;

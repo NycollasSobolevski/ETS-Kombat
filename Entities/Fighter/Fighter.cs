@@ -53,8 +53,8 @@ public abstract class Fighter : Entity
                 new Rectangle(
                     (int)Position.X,
                     (int)Position.Y,
-                    (int)Frame.HitBox.Value.Width,
-                    (int)Frame.HitBox.Value.Height
+                    (int)Frame.HitBox.Width,
+                    (int)Frame.HitBox.Height
                 )
             );
         
@@ -62,10 +62,10 @@ public abstract class Fighter : Entity
             g.DrawRectangle(
                 Pens.Blue,
                 new Rectangle(
-                    (int)Position.X,
-                    (int)Position.Y,
-                    (int)Frame.HurtBox.Value.Width,
-                    (int)Frame.HurtBox.Value.Height
+                    (int)Frame.HurtBox.X,
+                    (int)Frame.HurtBox.Y,
+                    (int)Frame.HurtBox.Width,
+                    (int)Frame.HurtBox.Height
                 )
             );
         
@@ -75,8 +75,8 @@ public abstract class Fighter : Entity
                     new Rectangle(
                     (int)Position.X,
                     (int)Position.Y,
-                    (int)Frame.PushBox.Value.Width,
-                    (int)Frame.PushBox.Value.Height
+                    (int)Frame.PushBox.Width,
+                    (int)Frame.PushBox.Height
                 )
                 );
 
@@ -86,8 +86,8 @@ public abstract class Fighter : Entity
                     new Rectangle(
                     (int)Position.X,
                     (int)Position.Y,
-                    (int)Frame.ThrowBox.Value.Width,
-                    (int)Frame.ThrowBox.Value.Height
+                    (int)Frame.ThrowBox.Width,
+                    (int)Frame.ThrowBox.Height
                 )
                 );
         

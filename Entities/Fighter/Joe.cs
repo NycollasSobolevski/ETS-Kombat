@@ -9,10 +9,13 @@ public class Joe : Fighter
         this.Size = new Size(200, 236);
         this.AnimationTimer = 1;
         Direction = FighterDirection.LEFT;
+        
 
+        setIdleFrames();
+        this.Frame = Frames[States.Idle][0];
+        setIdleHurtboxes();
         setForwardFrames();
         setBackwardFrames();
-        setIdleFrames();
         setJumpingFrames();
         setCrouchFrames();
     }
@@ -40,6 +43,13 @@ public class Joe : Fighter
     {
         this.Move(t);
         this.UpdateStageConstraints();
+
+        this.Frame.HurtBox = new RectangleF(
+            this.Rectangle.X + 30,
+            this.Rectangle.Y + 30,
+            this.Frame.HurtBox.Width,
+            this.Frame.HurtBox.Height   
+        );
         
         if (DateTime.Now - lastFrame > TimeSpan.FromMilliseconds(60))
         {
@@ -49,6 +59,8 @@ public class Joe : Fighter
 
         if (AnimationFrame >= Frames[CurrentState].Count)
             AnimationFrame = 0;
+        
+        
     }
 
 
@@ -121,28 +133,20 @@ public class Joe : Fighter
         // Rectangle hitboxes = new Rectangle();
         // Rectangle pushboxes = new Rectangle();
         // Rectangle throwboxes = new Rectangle();
-        hurtboxes[0] = new RectangleF(Position.X,Position.Y,72,115);        
-        hurtboxes[1] = new RectangleF(Position.X,Position.Y,61,105);
-        hurtboxes[2] = new RectangleF(Position.X,Position.Y,61,80);
-        hurtboxes[3] = new RectangleF(Position.X,Position.Y,61,105);
-        hurtboxes[4] = new RectangleF(Position.X,Position.Y,72,115);
         
         List<Frame> frames = new List<Frame>();
         int row = 4;
 
         for (int i = 0; i < 5; i++)
         {
-            frames.Add(
-                new Frame(
-                    new Point(360 + (100 * i), 179 + (118 * row)),
-                    new Size(100, 118),
-                    new Point(0, 0)
-                )
-                {
-                    HurtBox = hurtboxes[i]
-                }
+            Frame frame = new Frame(
+                new Point(360 + (100 * i), 179 + (118 * row)),
+                new Size(100, 118),
+                new Point(0, 0)
             );
+            frames.Add(frame);
         }
+
 
         this.Frames.Add(
             States.Jump,
@@ -209,5 +213,19 @@ public class Joe : Fighter
             States.CrouchDown,
             frames
         );
+    }
+
+    void setIdleHurtboxes()
+    {
+        var hurtboxes = new RectangleF[] {
+            new RectangleF(0, 0, 72, 115),        
+            new RectangleF(0, 0, 61, 105),
+            new RectangleF(0, 0, 61, 80),
+            new RectangleF(0, 0, 61, 105),
+            new RectangleF(0, 0, 72, 115),
+        };
+
+        for (int i = 0; i < Frames[States.Idle].Count; i++)
+            Frames[States.Idle][i].HurtBox = hurtboxes[i];
     }
 }
