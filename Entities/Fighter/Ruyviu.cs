@@ -194,13 +194,16 @@ public class Ruyviu : Fighter
             States.Jump,
             frames
         );
+
+        this.setJumpingFFrames();
+        this.setJumpingBFrames();
     }
     private void setJumpingFFrames()
     {
         List<Frame> frames = new List<Frame>();
-        int row = 4;
+        int row = 7;
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 6 ; i++)
         {
             frames.Add(
                 new Frame(
@@ -212,12 +215,29 @@ public class Ruyviu : Fighter
         }
 
         this.Frames.Add(
-            States.Jump,
+            States.JumpForward,
             frames
         );
     }
     private void setJumpingBFrames()
     {
+        List<Frame> frames = new List<Frame>();
+        int row = 7;
 
+        for (int i = 6; i >= 0 ; i--)
+        {
+            frames.Add(
+                new Frame(
+                    new Point(360 + (100 * i), 179 + (118 * row)),
+                    new Size(100, 118),
+                    new Point(0, 0)
+                )
+            );
+        }
+
+        this.Frames.Add(
+            States.JumpBackward,
+            frames
+        );
     }
 }

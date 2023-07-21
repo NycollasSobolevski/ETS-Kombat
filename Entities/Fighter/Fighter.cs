@@ -132,20 +132,24 @@ public abstract class Fighter : Entity
                 handleIdle();
                 break;
             
-            case States.Jump:
-                handleJump();
-                break;
-            
             case States.CrouchDown:
                 handleCrouchDown();
                 break;
-            
             case States.Crouch:
                 handleCrouch();
-                break;
-            
+                break;      
             case States.CrouchUp:
                 handleCrouchUp();
+                break;
+            
+            case States.Jump:
+                handleJump();
+                break;
+            case States.JumpForward:
+                handleJumpForward();
+                break;
+            case States.JumpBackward:
+                handleJumpBackward();
                 break;
         }
     }
