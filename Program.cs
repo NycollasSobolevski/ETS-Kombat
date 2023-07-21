@@ -59,11 +59,21 @@ form.KeyDown += (sender, e) => {
         k.CurrentState = States.Jump;
     }
 
+    else if (e.KeyCode == Keys.S)
+    {
+        k.CurrentState = States.CrouchDown;
+    }
+
     else
     {
         k.CurrentState = States.Idle;
     }
 
+};
+
+form.KeyUp += (sender, e) => {
+    if (e.KeyCode == Keys.S)
+        k.CurrentState = States.CrouchUp;
 };
 
 timer.Tick += delegate {
