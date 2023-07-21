@@ -113,20 +113,25 @@ public class Joe : Fighter
             frames
         );
     }
+
+    //TODO :: new frame is here!!!
     void setJumpingFrames()
     {
         Rectangle[] hurtboxes = new Rectangle[5];
-        Rectangle hitboxes = new Rectangle();
-        Rectangle pushboxes = new Rectangle();
-        Rectangle throwboxes = new Rectangle();
+        // Rectangle hitboxes = new Rectangle();
+        // Rectangle pushboxes = new Rectangle();
+        // Rectangle throwboxes = new Rectangle();
 
+        //! ruyviu's hurtboxes
+
+        hurtboxes[0] = new Rectangle(0,0,72,115);        
+        hurtboxes[1] = new Rectangle(0,0,61,105);
+        hurtboxes[2] = new Rectangle(0,0,61,80);
+        hurtboxes[3] = new Rectangle(0,0,61,105);
+        hurtboxes[4] = new Rectangle(0,0,72,115);
+        
         List<Frame> frames = new List<Frame>();
         int row = 4;
-        hurtboxes[0] = new Rectangle(0,0,70,110);
-        hurtboxes[1] = new Rectangle(0,0,70,110);
-        hurtboxes[2] = new Rectangle(0,0,70,110);
-        hurtboxes[3] = new Rectangle(0,0,70,110);
-        hurtboxes[4] = new Rectangle(0,0,70,110);
 
         for (int i = 0; i < 5; i++)
         {
@@ -137,7 +142,7 @@ public class Joe : Fighter
                     new Point(0, 0)
                 )
                 {
-                    HurtBox = hurtboxes
+                    HurtBox = hurtboxes[i]
                 }
             );
         }

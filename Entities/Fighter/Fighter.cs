@@ -48,18 +48,16 @@ public abstract class Fighter : Entity
         );
 
         if (this.Frame.HitBox != null)
-            foreach (var rect in Frame.HitBox)
-                g.DrawRectangle(
-                    Pens.Red,
-                    rect
-                );
+            g.DrawRectangle(
+                Pens.Red,
+                (Rectangle)Frame.HitBox
+            );
         
         if (this.Frame.HurtBox != null)
-            foreach (var rect in Frame.HurtBox)
-                g.DrawRectangle(
-                    Pens.Blue,
-                    rect
-                );
+            g.DrawRectangle(
+                Pens.Blue,
+                (Rectangle)Frame.HurtBox
+            );
         
         if (this.Frame.PushBox != null)
                 g.DrawRectangle(
