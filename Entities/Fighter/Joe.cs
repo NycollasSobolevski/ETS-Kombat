@@ -18,7 +18,7 @@ public class Joe : Fighter
         setJumpingFrames();
         setCrouchFrames();
         setHurtboxes(States.Idle);
-        setHurtboxes(States.Backward );
+        setHurtboxes(States.Backward);
         setHurtboxes(States.Jump);
         setHurtboxes(States.Crouch);
     }
@@ -67,7 +67,8 @@ public class Joe : Fighter
     }
 
 
-    //! ANIMATION FRAMES AND SPRITES
+    #region Frames&Sprites
+
     void setForwardFrames()
     {
         List<Frame> frames = new List<Frame>();
@@ -128,8 +129,6 @@ public class Joe : Fighter
             frames
         );
     }
-
-    //TODO :: new frame is here!!!
     void setJumpingFrames()
     {
         RectangleF[] hurtboxes = new RectangleF[5];
@@ -217,7 +216,6 @@ public class Joe : Fighter
             frames
         );
     }
-
     void setHurtboxes(States state)
     {
 
@@ -277,4 +275,6 @@ public class Joe : Fighter
                 Frames[States.Backward][i].HurtBox = hurtboxes[i];
         }
     }
+    
+    #endregion Frames 
 }
