@@ -62,17 +62,15 @@ public abstract class Fighter : Entity
                 );
         
         if (this.Frame.PushBox != null)
-            foreach (var rect in Frame.PushBox)
                 g.DrawRectangle(
                     Pens.Green,
-                    rect
+                    Frame.PushBox
                 );
 
         if (this.Frame.ThrowBox != null)
-            foreach (var rect in Frame.ThrowBox)
                 g.DrawRectangle(
                     Pens.Black,
-                    rect
+                    Frame.ThrowBox
                 );
         
         
@@ -166,7 +164,7 @@ public abstract class Fighter : Entity
     public void handleCrouchDown()
     {
         this.CurrentState = States.CrouchDown;
-        isCrouching = AnimationFrame >= 2;
+        isCrouching = AnimationFrame >= 1;
 
         if (isCrouching)
             this.CurrentState = States.Crouch;
@@ -174,7 +172,7 @@ public abstract class Fighter : Entity
     public void handleCrouchUp()
     {
         this.CurrentState = States.CrouchUp;
-        isCrouching = AnimationFrame >= 2;
+        isCrouching = AnimationFrame >= 1;
 
         if (isCrouching)
             this.CurrentState = States.Idle;
@@ -183,5 +181,8 @@ public abstract class Fighter : Entity
     {
         this.CurrentState = States.Crouch;
         isCrouching = false;
+
+        this.Velocity.X = 0;
+        this.Velocity.Y = 0;
     }
 }
