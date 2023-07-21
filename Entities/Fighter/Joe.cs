@@ -13,11 +13,14 @@ public class Joe : Fighter
 
         setIdleFrames();
         this.Frame = Frames[States.Idle][0];
-        setIdleHurtboxes();
         setForwardFrames();
         setBackwardFrames();
         setJumpingFrames();
         setCrouchFrames();
+        setHurtboxes(States.Idle);
+        setHurtboxes(States.Backward );
+        setHurtboxes(States.Jump);
+        setHurtboxes(States.Crouch);
     }
 
     public override void Draw(Graphics g)
@@ -215,17 +218,63 @@ public class Joe : Fighter
         );
     }
 
-    void setIdleHurtboxes()
+    void setHurtboxes(States state)
     {
-        var hurtboxes = new RectangleF[] {
-            new RectangleF(0, 0, 72, 115),        
-            new RectangleF(0, 0, 61, 105),
-            new RectangleF(0, 0, 61, 80),
-            new RectangleF(0, 0, 61, 105),
-            new RectangleF(0, 0, 72, 115),
-        };
 
-        for (int i = 0; i < Frames[States.Idle].Count; i++)
-            Frames[States.Idle][i].HurtBox = hurtboxes[i];
+        if (state == States.Jump)
+        {
+            var hurtboxes = new RectangleF[] {
+                new RectangleF(0, 0, 72 * 2, 115 * 2),
+                new RectangleF(0, 0, 61 * 2, 105 * 2),
+                new RectangleF(0, 0, 61 * 2, 80 * 2),
+                new RectangleF(0, 0, 61 * 2, 105 * 2),
+                new RectangleF(0, 0, 72 * 2, 115 * 2),
+            };
+
+            for (int i = 0; i < Frames[States.Jump].Count; i++)
+                Frames[States.Jump][i].HurtBox = hurtboxes[i];
+        }
+        if (state == States.Idle)
+        {
+            var hurtboxes = new RectangleF[] {
+                new RectangleF(0, 0, (68 * 2), (103 * 2)),
+                new RectangleF(0, 0, (68 * 2), (103 * 2)),
+                new RectangleF(0, 0, (68 * 2), (103 * 2)),
+                new RectangleF(0, 0, (68 * 2), (103 * 2)),
+                new RectangleF(0, 0, (68 * 2), (103 * 2)),
+            };
+
+            for (int i = 0; i < Frames[States.Idle].Count; i++)
+                Frames[States.Idle][i].HurtBox = hurtboxes[i];
+        }
+        if (state == States.Backward || state == States.Forward)
+        {
+            var hurtboxes = new RectangleF[] {
+                new RectangleF(0, 0, (55 * 2), (106 * 2)),
+                new RectangleF(0, 0, (66 * 2), (105 * 2)),
+                new RectangleF(0, 0, (80 * 2), (118 * 2)),
+                new RectangleF(0, 0, (100 * 2), (105 * 2)),
+                new RectangleF(0, 0, (66 * 2), (105 * 2)),
+            };
+
+            //TODO: backward foreward  
+            for(int i = 0; i < Frames[States.Forward].Count; i++)
+                Frames[States.Forward][i].HurtBox = hurtboxes[i];
+            for(int i = 0; i < Frames[States.Backward].Count; i++)
+                Frames[States.Backward][i].HurtBox = hurtboxes[i];            
+        }
+        if (state == States.Crouch)
+        {
+            var hurtboxes = new RectangleF[] {
+                new RectangleF(0, 0, 72 * 2, 115 * 2),
+                new RectangleF(0, 0, 61 * 2, 105 * 2),
+                new RectangleF(0, 0, 61 * 2, 80 * 2),
+                new RectangleF(0, 0, 61 * 2, 105 * 2),
+                new RectangleF(0, 0, 72 * 2, 115 * 2),
+            };
+
+            for (int i = 0; i < Frames[States.Backward].Count; i++)
+                Frames[States.Backward][i].HurtBox = hurtboxes[i];
+        }
     }
 }
