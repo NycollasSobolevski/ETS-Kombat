@@ -21,6 +21,24 @@ public class Frame
                 Size.Height * 2
             );
     }
+    public Frame(Point pointInSpriteSheet, Size size, Point originPoint,
+        Rectangle[] hurtbox, Rectangle[] hitbox, Rectangle[] pushbox, Rectangle[] throwbox)
+    {
+        PointInSpriteSheet = pointInSpriteSheet;
+        Size = size;
+        if (originPoint.X != 0 && originPoint.Y != 0)
+            OriginPoint = originPoint;
+        else
+            OriginPoint = new Point(
+                //! essa conta
+                Size.Width,
+                Size.Height * 2
+            );
+        this.HitBox = hitbox;
+        this.HurtBox = hurtbox;
+        this.PushBox = pushbox;
+        this.ThrowBox = throwbox;
+    }
 
     public Rectangle ToRectangle()
         => new Rectangle(PointInSpriteSheet, Size);
