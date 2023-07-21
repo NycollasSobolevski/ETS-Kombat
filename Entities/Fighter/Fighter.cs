@@ -29,12 +29,54 @@ public abstract class Fighter : Entity
     protected DateTime lastFrame = DateTime.Now;
     protected int AnimationTimer { get; set; }
     protected bool isJumping = false;
+    protected bool isCrouching = false;
     
     
     // !FUNCTIONS
     public abstract void Update(Graphics g, TimeSpan t);
-    public abstract void DrawDebug(Graphics g);
     public abstract void Draw(Graphics g);
+    public virtual void DrawDebug(Graphics g)
+    {
+        g.FillRectangle(
+            Brushes.Red,
+            new RectangleF(
+                Rectangle.X + Frame.OriginPoint.X,
+                Rectangle.Y + Frame.OriginPoint.Y,
+                5,
+                5
+            )
+        );
+
+        if (this.Frame.HitBox != null)
+            foreach (var rect in Frame.HitBox)
+                g.DrawRectangle(
+                    Pens.Red,
+                    rect
+                );
+        
+        if (this.Frame.HurtBox != null)
+            foreach (var rect in Frame.HurtBox)
+                g.DrawRectangle(
+                    Pens.Blue,
+                    rect
+                );
+        
+        if (this.Frame.PushBox != null)
+            foreach (var rect in Frame.PushBox)
+                g.DrawRectangle(
+                    Pens.Green,
+                    rect
+                );
+
+        if (this.Frame.ThrowBox != null)
+            foreach (var rect in Frame.ThrowBox)
+                g.DrawRectangle(
+                    Pens.Black,
+                    rect
+                );
+        
+        
+    }
     public void Move(TimeSpan t)
     {
         this.Velocity.Y += (float)(this.Gravity * t.TotalSeconds);
@@ -65,18 +107,27 @@ public abstract class Fighter : Entity
             case States.Backward:
                 handleWalkingLeft();
                 break;
+            
             case States.Forward:
                 handleWalkingRight();
                 break;
+            
             case States.Idle:
                 handleIdle();
                 break;
+            
             case States.Jump:
                 handleJump();
                 break;
+            
             case States.CrouchDown:
                 handleCrouchDown();
                 break;
+            
+            case States.Crouch:
+                handleCrouch();
+                break;
+            
             case States.CrouchUp:
                 handleCrouchUp();
                 break;
@@ -115,9 +166,22 @@ public abstract class Fighter : Entity
     public void handleCrouchDown()
     {
         this.CurrentState = States.CrouchDown;
+        isCrouching = AnimationFrame >= 2;
+
+        if (isCrouching)
+            this.CurrentState = States.Crouch;
     }
     public void handleCrouchUp()
     {
         this.CurrentState = States.CrouchUp;
+        isCrouching = AnimationFrame >= 2;
+
+        if (isCrouching)
+            this.CurrentState = States.Idle;
+    }
+    public void handleCrouch()
+    {
+        this.CurrentState = States.Crouch;
+        isCrouching = false;
     }
 }

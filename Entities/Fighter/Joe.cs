@@ -14,6 +14,7 @@ public class Joe : Fighter
         setBackwardFrames();
         setIdleFrames();
         setJumpingFrames();
+        setCrouchFrames();
     }
 
     public override void Draw(Graphics g)
@@ -48,19 +49,6 @@ public class Joe : Fighter
 
         if (AnimationFrame >= Frames[CurrentState].Count)
             AnimationFrame = 0;
-    }
-
-    public override void DrawDebug(Graphics g)
-    {
-        g.FillRectangle(
-            Brushes.Red,
-            new RectangleF(
-                Rectangle.X + Frame.OriginPoint.X,
-                Rectangle.Y + Frame.OriginPoint.Y,
-                5,
-                5
-            )
-        );
     }
 
 
@@ -143,6 +131,67 @@ public class Joe : Fighter
 
         this.Frames.Add(
             States.Jump,
+            frames
+        );
+    }
+    void setCrouchFrames()
+    {
+        setCrouchDownFrames();
+        setCrouchUpFrames();
+
+        List<Frame> frames = new List<Frame>();
+        int row = 6 ;
+
+        frames.Add(new Frame(
+            new Point(360 + 200, 179 + (118 * row)),
+            new Size(100, 118),
+            new Point(0, 0)
+        ));
+
+        this.Frames.Add(
+            States.Crouch,
+            frames
+        );
+    }
+    private void setCrouchUpFrames()
+    {
+        List<Frame> frames = new List<Frame>();
+        int row = 6;
+
+        for (int i = 1; i > 0; i--)
+        {
+            frames.Add(
+                new Frame(
+                    new Point(360 + (100 * i), 179 + (118 * row)),
+                    new Size(100, 118),
+                    new Point(0, 0)
+                )
+            );
+        }
+
+        this.Frames.Add(
+            States.CrouchUp,
+            frames
+        );
+    }
+    private void setCrouchDownFrames()
+    {
+        List<Frame> frames = new List<Frame>();
+        int row = 6;
+
+        for (int i = 0; i < 2; i++)
+        {
+            frames.Add(
+                new Frame(
+                    new Point(360 + (100 * i), 179 + (118 * row)),
+                    new Size(100, 118),
+                    new Point(0, 0)
+                )
+            );
+        }
+
+        this.Frames.Add(
+            States.CrouchDown,
             frames
         );
     }
