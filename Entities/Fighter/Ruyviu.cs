@@ -113,27 +113,6 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    void setJumpingFrames()
-    {
-        List<Frame> frames = new List<Frame>();
-        int row = 4;
-
-        for (int i = 0; i < 5; i++)
-        {
-            frames.Add(
-                new Frame(
-                    new Point(360 + (100 * i), 179 + (118 * row)),
-                    new Size(100, 118),
-                    new Point(0, 0)
-                )
-            );
-        }
-
-        this.Frames.Add(
-            States.Jump,
-            frames
-        );
-    }
     void setCrouchFrames()
     {
         setCrouchDownFrames();
@@ -194,5 +173,51 @@ public class Ruyviu : Fighter
             States.CrouchDown,
             frames
         );
+    }
+    void setJumpingFrames()
+    {
+        List<Frame> frames = new List<Frame>();
+        int row = 4;
+
+        for (int i = 0; i < 5; i++)
+        {
+            frames.Add(
+                new Frame(
+                    new Point(360 + (100 * i), 179 + (118 * row)),
+                    new Size(100, 118),
+                    new Point(0, 0)
+                )
+            );
+        }
+
+        this.Frames.Add(
+            States.Jump,
+            frames
+        );
+    }
+    private void setJumpingFFrames()
+    {
+        List<Frame> frames = new List<Frame>();
+        int row = 4;
+
+        for (int i = 0; i < 5; i++)
+        {
+            frames.Add(
+                new Frame(
+                    new Point(360 + (100 * i), 179 + (118 * row)),
+                    new Size(100, 118),
+                    new Point(0, 0)
+                )
+            );
+        }
+
+        this.Frames.Add(
+            States.Jump,
+            frames
+        );
+    }
+    private void setJumpingBFrames()
+    {
+
     }
 }

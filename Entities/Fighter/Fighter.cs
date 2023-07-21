@@ -150,6 +150,7 @@ public abstract class Fighter : Entity
         }
     }
 
+    // ?Basic Movement Functions
     public void handleWalkingLeft()
     {
         this.Velocity.X = -250;
@@ -167,17 +168,6 @@ public abstract class Fighter : Entity
         this.Gravity = 0;
         this.CurrentState = States.Idle;
         isJumping = false;
-    }
-    public void handleJump()
-    { 
-        if (!isJumping)
-        {
-            this.Velocity.Y = -800;
-            this.Gravity = 1000;
-            this.isJumping = true;
-        }
-
-        this.CurrentState = States.Jump;
     }
     public void handleCrouchDown()
     {
@@ -202,5 +192,40 @@ public abstract class Fighter : Entity
 
         this.Velocity.X = 0;
         this.Velocity.Y = 0;
+    }
+    public void handleJump()
+    { 
+        if (!isJumping)
+        {
+            this.Velocity.Y = -800;
+            this.Gravity = 1500;
+            this.isJumping = true;
+        }
+
+        this.CurrentState = States.Jump;
+    }
+    public void handleJumpForward()
+    {
+        if (!isJumping)
+        {
+            this.Velocity.Y = -800;
+            this.Velocity.X = 250;
+            this.Gravity = 1500;
+            this.isJumping = true;
+        }
+
+        this.CurrentState = States.JumpForward;
+    }
+    public void handleJumpBackward()
+    {
+        if (!isJumping)
+        {
+            this.Velocity.Y = -800;
+            this.Velocity.X = -250;
+            this.Gravity = 1500;
+            this.isJumping = true;
+        }
+
+        this.CurrentState = States.JumpBackward;
     }
 }

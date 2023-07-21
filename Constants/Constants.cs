@@ -13,6 +13,8 @@ public enum States
     Forward,
     Backward,
     Jump,
+    JumpForward,
+    JumpBackward,
     Idle,
     CrouchDown,
     CrouchUp,
