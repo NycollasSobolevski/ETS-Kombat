@@ -15,10 +15,23 @@ List<Entity> all_entities = new List<Entity>();
 FpsCounter fps = new FpsCounter();
 all_entities.Add(fps);
 //! Select person
-// Ruyviu k = new Ruyviu();
-Joe k = new Joe();
+Ruyviu k = new Ruyviu();
+// Joe k = new Joe();
 all_entities.Add(k);
 //! Add to list
+
+//? Button Handlers
+bool isWPressed = false;
+bool isAPressed = false;
+bool isSPressed = false;
+bool isDPressed = false;
+bool isJPressed = false;
+bool isKPressed = false;
+bool isLPressed = false;
+bool isUPressed = false;
+bool isIPressed = false;
+bool isOPressed = false;
+//? Button Handlers
 
 pb.Dock = DockStyle.Fill;
 form.Controls.Add(pb);
@@ -45,35 +58,65 @@ form.KeyDown += (sender, e) => {
         Application.Exit();
     
     if (e.KeyCode == Keys.A)
-    {
-        k.CurrentState = States.Backward;
-    }
+        isAPressed = true;
+    if (e.KeyCode == Keys.D)
+        isDPressed = true;
+    if (e.KeyCode == Keys.W)
+        isWPressed = true;
+    if (e.KeyCode == Keys.S)
+        isSPressed = true;
+
+    if (e.KeyCode == Keys.J)
+        isJPressed = true;
+    if (e.KeyCode == Keys.K)
+        isKPressed = true;
+    if (e.KeyCode == Keys.L)
+        isLPressed = true;
+    if (e.KeyCode == Keys.U)
+        isUPressed = true;
+    if (e.KeyCode == Keys.I)
+        isIPressed = true;
+    if (e.KeyCode == Keys.O)
+        isOPressed = true;
     
-    else if (e.KeyCode == Keys.D)
-    {
-        k.CurrentState = States.Forward;
-    }
-    
-    else if (e.KeyCode == Keys.W)
-    {
+
+    if (isWPressed && isAPressed)
+        k.CurrentState = States.JumpBackward;
+
+    else if (isWPressed && isDPressed)
+        k.CurrentState = States.JumpForward;
+
+    else if (isWPressed)
         k.CurrentState = States.Jump;
-    }
 
-    else if (e.KeyCode == Keys.S)
-    {
+    else if (isSPressed)
         k.CurrentState = States.CrouchDown;
-    }
-
+    
+    else if (isDPressed)
+        k.CurrentState = States.Forward;
+    
+    else if (isAPressed)
+        k.CurrentState = States.Backward;
+    
     else
-    {
         k.CurrentState = States.Idle;
-    }
+    
 
 };
 
 form.KeyUp += (sender, e) => {
+    if (e.KeyCode == Keys.A)
+        isAPressed = false;
+    if (e.KeyCode == Keys.D)
+        isDPressed = false;
+    if (e.KeyCode == Keys.W)
+        isWPressed = false;
     if (e.KeyCode == Keys.S)
+    {
+        isSPressed = false;
         k.CurrentState = States.CrouchUp;
+        return;
+    }
 };
 
 timer.Tick += delegate {
