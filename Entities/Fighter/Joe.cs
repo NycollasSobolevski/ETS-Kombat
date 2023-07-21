@@ -115,8 +115,18 @@ public class Joe : Fighter
     }
     void setJumpingFrames()
     {
+        Rectangle[] hurtboxes = new Rectangle[5];
+        Rectangle hitboxes = new Rectangle();
+        Rectangle pushboxes = new Rectangle();
+        Rectangle throwboxes = new Rectangle();
+
         List<Frame> frames = new List<Frame>();
         int row = 4;
+        hurtboxes[0] = new Rectangle(0,0,70,110);
+        hurtboxes[1] = new Rectangle(0,0,70,110);
+        hurtboxes[2] = new Rectangle(0,0,70,110);
+        hurtboxes[3] = new Rectangle(0,0,70,110);
+        hurtboxes[4] = new Rectangle(0,0,70,110);
 
         for (int i = 0; i < 5; i++)
         {
@@ -126,6 +136,9 @@ public class Joe : Fighter
                     new Size(100, 118),
                     new Point(0, 0)
                 )
+                {
+                    HurtBox = hurtboxes
+                }
             );
         }
 

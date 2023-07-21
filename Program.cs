@@ -14,8 +14,9 @@ List<Entity> all_entities = new List<Entity>();
 //! Entities
 FpsCounter fps = new FpsCounter();
 all_entities.Add(fps);
-
-Ruyviu k = new Ruyviu();
+//! Select person
+// Ruyviu k = new Ruyviu();
+Joe k = new Joe();
 all_entities.Add(k);
 //! Add to list
 
