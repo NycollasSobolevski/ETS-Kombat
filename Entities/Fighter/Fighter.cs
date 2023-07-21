@@ -64,13 +64,13 @@ public abstract class Fighter : Entity
         if (this.Frame.PushBox != null)
                 g.DrawRectangle(
                     Pens.Green,
-                    Frame.PushBox
+                    (Rectangle)Frame.PushBox
                 );
 
         if (this.Frame.ThrowBox != null)
                 g.DrawRectangle(
                     Pens.Black,
-                    Frame.ThrowBox
+                    (Rectangle)Frame.ThrowBox
                 );
         
         
