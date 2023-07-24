@@ -10,19 +10,9 @@ public class Joe : Fighter
         this.Size = new Size(200, 236);
         this.AnimationTimer = 1;
         Direction = FighterDirection.LEFT;
-        
-
-        setIdleFrames();
-        this.Frame = Frames[States.Idle][0];
-        setForwardFrames();
-        setBackwardFrames();
-        setJumpingFrames();
-        setCrouchFrames();
-        setHurtboxes(States.Idle);
-        setHurtboxes(States.Backward);
-        setHurtboxes(States.Jump);
-        setHurtboxes(States.JumpBackward);
-        setHurtboxes(States.Crouch);
+            
+        setFrames();
+        setHurtboxe();
     }
 
     public override void Draw(Graphics g)
@@ -70,8 +60,27 @@ public class Joe : Fighter
     }
 
 
-    #region Frames&Sprites
+    private void setFrames()
+    {
+        setIdleFrames();
+        this.Frame = Frames[States.Idle][0];
+        setForwardFrames();
+        setBackwardFrames();
+        setJumpingFrames();
+        setCrouchFrames();
+        setLightPunchFrames();
+        setMediumPunchFrames();
+    }
+    private void setHurtboxe()
+    {
+        setHurtboxes(States.Idle);
+        setHurtboxes(States.Backward);
+        setHurtboxes(States.Jump);
+        setHurtboxes(States.JumpBackward);
+        setHurtboxes(States.Crouch);
+    }
 
+    #region 
     void setForwardFrames()
     {
         List<Frame> frames = new List<Frame>();
@@ -134,8 +143,6 @@ public class Joe : Fighter
     }
     void setJumpingFrames()
     {
-        RectangleF[] hurtboxes = new RectangleF[5];
-
         List<Frame> frames = new List<Frame>();
         int row = 4;
 
@@ -155,7 +162,6 @@ public class Joe : Fighter
         setJumpingBFrames();   
         setJumpingFFrames();   
     }
-
     private void setJumpingFFrames()
     {
         List<Frame> frames = new List<Frame>();
@@ -217,6 +223,46 @@ public class Joe : Fighter
             frames
         );
     }
+    void setLightPunchFrames()
+    {
+        List<Frame> frames = new();
+        int row = 3 ;
+
+        for (int i = 0; i < 2; i++)
+        {
+            Frame frame = new Frame(
+                new Point(360 + (120 * i), 179 + (118 * row)),
+                new Size(120, 118),
+                new Point(0, 0)
+            );
+            frames.Add(frame);
+        }
+        
+        this.Frames.Add(
+            States.LightPunch,
+            frames
+        );
+    }    
+    void setMediumPunchFrames()
+    {
+        List<Frame> frames = new();
+        int row = 3 ;
+
+        for (int i = 0; i < 2; i++)
+        {
+            Frame frame = new Frame(
+                new Point(660 + (120 * i), 179 + (118 * row)),
+                new Size(120, 118),
+                new Point(0, 0)
+            );
+            frames.Add(frame);
+        }
+        
+        this.Frames.Add(
+            States.MediumPuch,
+            frames
+        );
+    }    
     private void setCrouchUpFrames()
     {
         List<Frame> frames = new List<Frame>();
@@ -330,11 +376,12 @@ public class Joe : Fighter
     }
     private void setHitboxes(States state)
     {
-        // if (state == States.)
-        // {
-        //     RectangleF rects = new RectangleF(0,0,100,118);
-        // }
+        if (state == States.LightPunch)
+        {
+            // Frames[]
+            // RectangleF rects = new RectangleF(0,0,100,118);
+        }
     }
     
-    #endregion Frames 
+    #endregion 
 }

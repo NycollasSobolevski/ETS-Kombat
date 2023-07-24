@@ -105,7 +105,11 @@ form.KeyDown += (sender, e) => {
     
     else if (isAPressed)
         k.CurrentState = States.Backward;
-    
+    else if (isJPressed)
+        k.CurrentState = States.LightPunch;
+    else if (isKPressed)
+        k.CurrentState = States.MediumPuch;
+
     if (e.KeyCode == Keys.Right)
         j.CurrentState = States.Forward;
     if (e.KeyCode == Keys.Left)
