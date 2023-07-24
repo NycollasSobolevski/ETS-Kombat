@@ -16,8 +16,13 @@ FpsCounter fps = new FpsCounter();
 all_entities.Add(fps);
 //! Select person
 Ruyviu k = new Ruyviu();
-// Joe k = new Joe();
 all_entities.Add(k);
+
+Joe j = new Joe();
+all_entities.Add(j);
+
+k.Enemy = j;
+j.Enemy = k;
 //! Add to list
 
 //? Button Handlers
@@ -49,7 +54,8 @@ form.Load += delegate {
     g = Graphics.FromImage(bmp);
 
     k.ScreenSize = new Size(bmp.Width, bmp.Height);
-
+    j.ScreenSize = k.ScreenSize;
+    
     pb.Image = bmp;
 };
 
@@ -98,11 +104,16 @@ form.KeyDown += (sender, e) => {
     else if (isAPressed)
         k.CurrentState = States.Backward;
     
-    else
-        k.CurrentState = States.Idle;
-    
+    if (e.KeyCode == Keys.Right)
+        j.CurrentState = States.Forward;
+    if (e.KeyCode == Keys.Left)
+        j.CurrentState = States.Backward;
+    if (e.KeyCode == Keys.Up)
+        j.CurrentState = States.Jump;
+    if (e.KeyCode == Keys.Down)
+        j.CurrentState = States.CrouchDown;
 
-};
+    };
 
 form.KeyUp += (sender, e) => {
     if (e.KeyCode == Keys.A)
@@ -117,6 +128,9 @@ form.KeyUp += (sender, e) => {
         k.CurrentState = States.CrouchUp;
         return;
     }
+
+    if (e.KeyCode == Keys.Down)
+        j.CurrentState = States.CrouchUp;
 };
 
 timer.Tick += delegate {

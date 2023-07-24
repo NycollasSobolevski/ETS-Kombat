@@ -8,7 +8,7 @@ public class Ruyviu : Fighter
         this.Position = new Point(500, 1080 - STAGE_FLOOR);
         this.Size = new Size(200, 236);
         this.AnimationTimer = 1;
-        Direction = FighterDirection.LEFT;
+        Direction = FighterDirection.RIGHT;
 
         setForwardFrames();
         setBackwardFrames();
@@ -24,6 +24,7 @@ public class Ruyviu : Fighter
         Frame = Frames[CurrentState][AnimationFrame];
 
         ChangeState(CurrentState);
+        this.ChangeSpriteDirectionX(g);
 
         g.DrawImage(
             this.Image,
@@ -35,9 +36,10 @@ public class Ruyviu : Fighter
         g.EndContainer(container);
         this.DrawDebug(g);
     }
-
     public override void Update(Graphics g, TimeSpan t)
     {
+        var container = g.BeginContainer();
+
         this.Move(t);
         this.UpdateStageConstraints();
         
@@ -49,8 +51,9 @@ public class Ruyviu : Fighter
 
         if (AnimationFrame >= Frames[CurrentState].Count)
             AnimationFrame = 0;
-    }
 
+        g.EndContainer(container);
+    }
 
     //! ANIMATION FRAMES AND SPRITES
     void setForwardFrames()
@@ -203,7 +206,7 @@ public class Ruyviu : Fighter
         List<Frame> frames = new List<Frame>();
         int row = 7;
 
-        for (int i = 0; i < 6 ; i++)
+        for (int i = 0; i < 5 ; i++)
         {
             frames.Add(
                 new Frame(
@@ -224,7 +227,7 @@ public class Ruyviu : Fighter
         List<Frame> frames = new List<Frame>();
         int row = 7;
 
-        for (int i = 6; i >= 0 ; i--)
+        for (int i = 5; i >= 0 ; i--)
         {
             frames.Add(
                 new Frame(

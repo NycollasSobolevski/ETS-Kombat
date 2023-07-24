@@ -30,6 +30,7 @@ public abstract class Fighter : Entity
     protected int AnimationTimer { get; set; }
     protected bool isJumping = false;
     protected bool isCrouching = false;
+    public Fighter Enemy { get; set; }
     
     
     // !FUNCTIONS
@@ -154,6 +155,19 @@ public abstract class Fighter : Entity
         }
     }
 
+    // *Change SpriteDirection
+    public void ChangeSpriteDirectionX(Graphics g)
+    {
+        getDirection();
+        int directionValue = (int)(Direction);
+        if (directionValue == -1)
+            g.TranslateTransform((this.Position.X + 2 * this.Frame.Size.Width) * 2, 0);
+        g.ScaleTransform(directionValue, 1);
+    }
+    public void getDirection()
+        => this.Direction = this.Position.X > Enemy.Position.X?
+            FighterDirection.LEFT : FighterDirection.RIGHT;
+    
     // ?Basic Movement Functions
     public void handleWalkingLeft()
     {

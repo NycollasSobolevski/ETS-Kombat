@@ -5,7 +5,7 @@ public class Joe : Fighter
     public Joe()
     {
         this.Image =  new Bitmap("./Assets/Sprites/Joe.png");
-        this.Position = new Point(500, 1080 - STAGE_FLOOR);
+        this.Position = new Point(700, 1080 - STAGE_FLOOR);
         this.Size = new Size(200, 236);
         this.AnimationTimer = 1;
         Direction = FighterDirection.LEFT;
@@ -26,6 +26,8 @@ public class Joe : Fighter
     public override void Draw(Graphics g)
     {
         var container = g.BeginContainer();
+
+        this.ChangeSpriteDirectionX(g);
 
         Frame = Frames[CurrentState][AnimationFrame];
 
