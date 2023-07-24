@@ -29,6 +29,8 @@ public class Joe : Fighter
     {
         var container = g.BeginContainer();
 
+        this.ChangeSpriteDirectionX(g);
+
         Frame = Frames[CurrentState][AnimationFrame];
 
         ChangeState(CurrentState);
