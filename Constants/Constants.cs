@@ -19,4 +19,10 @@ public enum States
     CrouchDown,
     CrouchUp,
     Crouch,
+    LightPunch,
+    MediumPuch,
+    HeavyPunch,
+    LightKick,
+    MediumKick,
+    HeavyKick,
 }
