@@ -4,7 +4,7 @@ public class Ruyviu : Fighter
 {
     public Ruyviu()
     {
-        this.Image =  new Bitmap("../../../Assets/Sprites/Ruyviu.png");
+        this.Image =  new Bitmap("./Assets/Sprites/Ruyviu.png");
         this.Position = new Point(500, 1080 - STAGE_FLOOR);
         this.Size = new Size(200, 236);
         this.AnimationTimer = 1;

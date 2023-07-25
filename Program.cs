@@ -15,8 +15,8 @@ List<Entity> all_entities = new List<Entity>();
 FpsCounter fps = new FpsCounter();
 all_entities.Add(fps);
 //! Select person
-// Ruyviu k = new Ruyviu();
-Joe k = new Joe();
+Ruyviu k = new Ruyviu();
+// Joe k = new Joe();
 
 all_entities.Add(k);
 
@@ -132,7 +132,6 @@ form.KeyUp += (sender, e) => {
     {
         isSPressed = false;
         k.CurrentState = States.CrouchUp;
-        return;
     }
 
     if (e.KeyCode == Keys.Down)

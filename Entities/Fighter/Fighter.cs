@@ -2,7 +2,25 @@
 
 
 public abstract class Fighter : Entity
-{
+{   
+    // !Static
+
+    protected static Dictionary<States, States[]> validStates = new Dictionary<States, States[]>() {
+        {States.Backward, new States[] {States.Backward, States.Idle}},
+        {States.Forward, new States[] {States.Forward, States.Idle}},
+        
+        {States.Jump, new States[] {States.Jump, States.Idle}},
+        {States.JumpForward, new States[] {States.JumpForward, States.Idle}},
+        {States.JumpBackward, new States[] {States.JumpBackward, States.Idle}},
+        
+        {States.CrouchDown, new States[] {States.CrouchDown, States.Idle}},
+        {States.Crouch, new States[] {States.CrouchDown}},
+        {States.CrouchUp, new States[] {States.Crouch}},
+
+        {States.LightKick, new States[] {States.LightKick, States.Idle, States.Crouch, States.LightPunch, States.HeavyKick}},
+    };
+
+
     // *Basic Props
     public Dictionary<States, List<Frame>> Frames { get; set; } = new Dictionary<States, List<Frame>>();
     public States CurrentState { get; set; } = States.Idle;
@@ -31,7 +49,6 @@ public abstract class Fighter : Entity
     protected bool isJumping = false;
     protected bool isCrouching = false;
     public Fighter Enemy { get; set; }
-    
     
     // !FUNCTIONS
     public abstract void Update(Graphics g, TimeSpan t);
@@ -119,40 +136,41 @@ public abstract class Fighter : Entity
     }
     public void ChangeState(States state)
     {
-        switch(state)
-        {
-            case States.Backward:
-                handleWalkingLeft();
-                break;
-            
-            case States.Forward:
-                handleWalkingRight();
-                break;
-            
-            case States.Idle:
-                handleIdle();
-                break;
-            
-            case States.CrouchDown:
-                handleCrouchDown();
-                break;
-            case States.Crouch:
-                handleCrouch();
-                break;      
-            case States.CrouchUp:
-                handleCrouchUp();
-                break;
-            
-            case States.Jump:
-                handleJump();
-                break;
-            case States.JumpForward:
-                handleJumpForward();
-                break;
-            case States.JumpBackward:
-                handleJumpBackward();
-                break;
-        }
+        if (state == States.Idle || validStates[state].Contains(state))
+            switch(state)
+            {
+                case States.Backward:
+                        handleWalkingLeft();
+                    break;
+                
+                case States.Forward:
+                        handleWalkingRight();
+                    break;
+                
+                case States.Idle:
+                    handleIdle();
+                    break;
+                
+                case States.CrouchDown:
+                        handleCrouchDown();
+                    break;
+                case States.Crouch:
+                        handleCrouch();
+                    break;      
+                case States.CrouchUp:
+                        handleCrouchUp();
+                    break;
+                
+                case States.Jump:
+                        handleJump();
+                    break;
+                case States.JumpForward:
+                        handleJumpForward();
+                    break;
+                case States.JumpBackward:
+                        handleJumpBackward();
+                    break;
+            }
     }
 
     // *Change SpriteDirection
