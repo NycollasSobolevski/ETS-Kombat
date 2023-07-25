@@ -44,10 +44,16 @@ public class FightForm
             g.Clear(Color.White); // clear screen
 
             foreach (var item in all_entities)
-                item.Update(g, fps.TimePerFrame);
+                item.Update(g, DateTime.Now);
 
             foreach (var item in all_entities)
                 item.Draw(g);
+            
+            k.CurrentState =
+                Control.GetState(k);
+            
+            j.CurrentState =
+                Control.GetState(j);
 
             pb.Refresh();
         };
@@ -63,6 +69,10 @@ public class FightForm
             
             pb.Image = bmp;
         };
+
+
+        Player p1 = Player1.BuildPlayer(k);
+        Player p2 = Player2.BuildPlayer(j);
     }
 
     public void Run()

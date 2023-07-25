@@ -68,4 +68,67 @@ public static class Control
         };
     }
 
+    public static States GetState(Entity entity)
+    {
+        if (entity is Ruyviu)
+            return GetRuyviuState();
+        else if (entity is Joe)
+            return GetJoeState();
+        else
+            return States.Idle;
+    }
+
+    private static States GetRuyviuState()
+    {
+        States state = States.Idle;
+        if (KeyMapping.Map[Keys.D])
+            state = States.Forward;
+        if (KeyMapping.Map[Keys.A])
+            state = States.Backward;
+        if (KeyMapping.Map[Keys.W])
+            state = States.Jump;
+        if (KeyMapping.Map[Keys.S])
+            state = States.Crouch;
+        if (KeyMapping.Map[Keys.J])
+            state = States.LightKick;
+        if (KeyMapping.Map[Keys.K])
+            state = States.MediumKick;
+        if (KeyMapping.Map[Keys.L])
+            state = States.HeavyKick;
+        if (KeyMapping.Map[Keys.U])
+            state = States.LightPunch;
+        if (KeyMapping.Map[Keys.I])
+            state = States.MediumPunch;
+        if (KeyMapping.Map[Keys.O])
+            state = States.HeavyPunch;
+
+        return state;
+    }
+
+    private static States GetJoeState()
+    {
+        States state = States.Idle;
+        if (KeyMapping.Map[Keys.Right])
+            state = States.Forward;
+        if (KeyMapping.Map[Keys.Left])
+            state = States.Backward;
+        if (KeyMapping.Map[Keys.Up])
+            state = States.Jump;
+        if (KeyMapping.Map[Keys.Down])
+            state = States.Crouch;
+        if (KeyMapping.Map[Keys.NumPad1])
+            state = States.LightKick;
+        if (KeyMapping.Map[Keys.NumPad2])
+            state = States.MediumKick;
+        if (KeyMapping.Map[Keys.NumPad3])
+            state = States.HeavyKick;
+        if (KeyMapping.Map[Keys.NumPad4])
+            state = States.LightPunch;
+        if (KeyMapping.Map[Keys.NumPad5])
+            state = States.MediumPunch;
+        if (KeyMapping.Map[Keys.NumPad6])
+            state = States.HeavyPunch;
+
+        return state;
+    }
 }

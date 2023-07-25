@@ -21,8 +21,6 @@ public class Joe : Fighter
 
         this.ChangeSpriteDirectionX(g);
 
-        Frame = Frames[CurrentState][AnimationFrame];
-
         ChangeState(CurrentState);
 
         g.DrawImage(
@@ -31,47 +29,37 @@ public class Joe : Fighter
             Frame.ToRectangle(),
             GraphicsUnit.Pixel
         );
-        g.DrawString($"Hitbox position: {this.Frame.HitBox.X}, {this.Frame.HitBox.Y}", new Font("Arial", 12), Brushes.Black, new PointF(10,10));
+        g.DrawString($"Hitbox position: {Frame.HitBox.X}, {Frame.HitBox.Y}", new Font("Arial", 12), Brushes.Black, new PointF(10,10));
 
         g.EndContainer(container);
         this.DrawDebug(g);
     }
 
-    public override void Update(Graphics g, TimeSpan t)
+    public override void Update(Graphics g, DateTime t)
     {
-        this.Frame.HurtBox = new RectangleF(
+        Frame.HurtBox = new RectangleF(
             this.Rectangle.X,
             this.Rectangle.Y,
-            this.Frame.HurtBox.Width,
-            this.Frame.HurtBox.Height   
+            Frame.HurtBox.Width,
+            Frame.HurtBox.Height   
         );
 
-        this.Frame.HitBox = new RectangleF(
-            this.Rectangle.X + this.Frame.HitBoxInit.X,
-            this.Rectangle.Y + this.Frame.HitBoxInit.Y,
-            this.Frame.HitBoxInit.Width,
-            this.Frame.HitBoxInit.Height   
+        Frame.HitBox = new RectangleF(
+            this.Rectangle.X + Frame.HitBoxInit.X,
+            this.Rectangle.Y + Frame.HitBoxInit.Y,
+            Frame.HitBoxInit.Width,
+            Frame.HitBoxInit.Height   
         );
 
-        this.Move(t);
+        this.UpdateAnimation(t);
         this.UpdateStageConstraints();
-
-
-        if (DateTime.Now - lastFrame > TimeSpan.FromMilliseconds(60))
-        {
-            AnimationFrame++;
-            lastFrame = DateTime.Now;
-        }
-
-        if (AnimationFrame >= Frames[CurrentState].Count)
-            AnimationFrame = 0;
     }
 
 
     private void setFrames()
     {
         setIdleFrames();
-        this.Frame = Frames[States.Idle][0];
+        Frame = Frames[States.Idle][0];
         setForwardFrames();
         setBackwardFrames();
         setJumpingFrames();
@@ -107,7 +95,7 @@ public class Joe : Fighter
             );
         }
 
-        this.Frames.Add(States.Forward, frames);
+        Frames.Add(States.Forward, frames);
     }
     void setBackwardFrames()
     {
@@ -125,7 +113,7 @@ public class Joe : Fighter
             );
         }
 
-        this.Frames.Add(
+        Frames.Add(
             States.Backward,
             frames
         );
@@ -146,7 +134,7 @@ public class Joe : Fighter
             );
         }
 
-        this.Frames.Add(
+        Frames.Add(
             States.Idle,
             frames
         );
@@ -165,7 +153,7 @@ public class Joe : Fighter
             );
             frames.Add(frame);
         }
-        this.Frames.Add(
+        Frames.Add(
             States.Jump,
             frames
         );
@@ -188,7 +176,7 @@ public class Joe : Fighter
             );
         }
 
-        this.Frames.Add(
+        Frames.Add(
             States.JumpForward,
             frames
         );
@@ -209,7 +197,7 @@ public class Joe : Fighter
             );
         }
 
-        this.Frames.Add(
+        Frames.Add(
             States.JumpBackward,
             frames
         );
@@ -226,7 +214,7 @@ public class Joe : Fighter
             new Point(0, 0)
         ));
 
-        this.Frames.Add(
+        Frames.Add(
             States.Crouch,
             frames
         );
@@ -249,7 +237,7 @@ public class Joe : Fighter
             frames.Add(frame);
         }
         
-        this.Frames.Add(
+        Frames.Add(
             States.LightPunch,
             frames
         );
@@ -269,7 +257,7 @@ public class Joe : Fighter
             frames.Add(frame);
         }
         
-        this.Frames.Add(
+        Frames.Add(
             States.MediumPunch,
             frames
         );
@@ -290,7 +278,7 @@ public class Joe : Fighter
             );
         }
 
-        this.Frames.Add(
+        Frames.Add(
             States.CrouchUp,
             frames
         );
@@ -311,7 +299,7 @@ public class Joe : Fighter
             );
         }
 
-        this.Frames.Add(
+        Frames.Add(
             States.CrouchDown,
             frames
         );
@@ -387,7 +375,7 @@ public class Joe : Fighter
     }
     private void setHitboxes()
     {
-        this.Frames[States.LightPunch][1].HitBoxInit =
+        Frames[States.LightPunch][1].HitBoxInit =
             new RectangleF( 80, 40, 110, 40 );
     }
     

@@ -21,37 +21,24 @@ public class Ruyviu : Fighter
     {
         var container = g.BeginContainer();
 
-        Frame = Frames[CurrentState][AnimationFrame];
-
         ChangeState(CurrentState);
         this.ChangeSpriteDirectionX(g);
 
         g.DrawImage(
             this.Image,
             this.Rectangle,
-            Frame.ToRectangle(),
+            new Rectangle(Frame.PointInSpriteSheet.X, Frame.PointInSpriteSheet.Y, Frame.Size.Width, Frame.Size.Height),
             GraphicsUnit.Pixel
         );
 
         g.EndContainer(container);
         this.DrawDebug(g);
     }
-    public override void Update(Graphics g, TimeSpan t)
+    public override void Update(Graphics g, DateTime t)
     {
         var container = g.BeginContainer();
-
-        this.Move(t);
+        this.UpdateAnimation(t);
         this.UpdateStageConstraints();
-        
-        if (DateTime.Now - lastFrame > TimeSpan.FromMilliseconds(60))
-        {
-            AnimationFrame++;
-            lastFrame = DateTime.Now;
-        }
-
-        if (AnimationFrame >= Frames[CurrentState].Count)
-            AnimationFrame = 0;
-
         g.EndContainer(container);
     }
 

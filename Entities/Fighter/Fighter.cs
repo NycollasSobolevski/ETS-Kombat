@@ -18,6 +18,8 @@ public abstract class Fighter : Entity
         {States.CrouchUp, new States[] {States.Crouch}},
 
         {States.LightKick, new States[] {States.LightKick, States.Idle, States.Crouch, States.LightPunch, States.HeavyKick}},
+
+        {States.Idle, new States[] {States.Idle, States.Backward, States.Forward, States.Crouch, States.Jump, States.LightKick, States.MediumKick, States.HeavyKick, States.LightPunch, States.MediumPunch, States.HeavyPunch}},
     };
 
 
@@ -32,7 +34,7 @@ public abstract class Fighter : Entity
     public PointF Position { get; set; }
     public Size Size { get; set; }
     public int Gravity { get; set; } = 0;
-    public Frame Frame { get; set; }
+    public Frame Frame { get; protected set; }
     public RectangleF Rectangle {
         get {
             return new RectangleF(
@@ -45,13 +47,13 @@ public abstract class Fighter : Entity
         private set{ }
     }
     protected DateTime lastFrame = DateTime.Now;
-    protected int AnimationTimer { get; set; }
+    protected int AnimationTimer { get; set; } = 300;
     protected bool isJumping = false;
     protected bool isCrouching = false;
     public Fighter Enemy { get; set; }
     
     // !FUNCTIONS
-    public abstract void Update(Graphics g, TimeSpan t);
+    public abstract void Update(Graphics g, DateTime t);
     public abstract void Draw(Graphics g);
     public virtual void DrawDebug(Graphics g)
     {
@@ -65,7 +67,7 @@ public abstract class Fighter : Entity
             )
         );
 
-        if (this.Frame.HitBox != null)
+        if (Frame.HitBox != null)
             g.DrawRectangle(
                 Pens.Red,
                 new Rectangle(
@@ -76,7 +78,7 @@ public abstract class Fighter : Entity
                 )
             );
         
-        if (this.Frame.HurtBox != null)
+        if (Frame.HurtBox != null)
             g.DrawRectangle(
                 Pens.Blue,
                 new Rectangle(
@@ -87,7 +89,7 @@ public abstract class Fighter : Entity
                 )
             );
         
-        if (this.Frame.PushBox != null)
+        if (Frame.PushBox != null)
                 g.DrawRectangle(
                     Pens.Green,
                     new Rectangle(
@@ -98,7 +100,7 @@ public abstract class Fighter : Entity
                 )
                 );
 
-        if (this.Frame.ThrowBox != null)
+        if (Frame.ThrowBox != null)
                 g.DrawRectangle(
                     Pens.Black,
                     new Rectangle(
@@ -110,14 +112,6 @@ public abstract class Fighter : Entity
                 );
         
         
-    }
-    public void Move(TimeSpan t)
-    {
-        this.Velocity.Y += (float)(this.Gravity * t.TotalSeconds);
-        this.Position = new PointF(
-            (float)(this.Position.X + (this.Velocity.X * t.TotalSeconds)),
-            (float)(this.Position.Y + this.Velocity.Y * t.TotalSeconds)
-        ); 
     }
     public void UpdateStageConstraints()
     {
@@ -136,56 +130,90 @@ public abstract class Fighter : Entity
     }
     public void ChangeState(States state)
     {
-        if (state == States.Idle || validStates[state].Contains(state))
+        if (validStates[state].Contains(state))
             switch(state)
             {
                 case States.Backward:
-                        handleWalkingLeft();
+                    initBackward();
                     break;
-                
                 case States.Forward:
-                        handleWalkingRight();
+                    initForward();
                     break;
-                
                 case States.Idle:
-                    handleIdle();
+                    initIdle();
                     break;
-                
                 case States.CrouchDown:
-                        handleCrouchDown();
+                    initCrouchDown();
+                    break;
+                case States.CrouchUp:
+                    initCrouchUp();
                     break;
                 case States.Crouch:
-                        handleCrouch();
-                    break;      
-                case States.CrouchUp:
-                        handleCrouchUp();
+                    initCrouch();
                     break;
-                
                 case States.Jump:
-                        handleJump();
+                    initJump();
                     break;
                 case States.JumpForward:
-                        handleJumpForward();
+                    initJumpForward();
                     break;
                 case States.JumpBackward:
-                        handleJumpBackward();
+                    initJumpBackward();
+                    break;
+                case States.LightKick:
+                    initLightKick();
+                    break;
+                case States.MediumKick:
+                    initMediumKick();
+                    break;
+                case States.HeavyKick:
+                    initHeavyKick();
+                    break;
+                case States.LightPunch:
+                    initLightPunch();
+                    break;
+                case States.MediumPunch:
+                    initMediumPunch();
+                    break;
+                case States.HeavyPunch:
+                    initHeavyPunch();
                     break;
             }
     }
 
+    public void Move(DateTime t)
+    {
+        this.Position = new PointF(this.Position.X + Velocity.X * this.AnimationTimer, this.Position.Y + Velocity.Y * this.AnimationTimer);
+    }
+    
     // *Change SpriteDirection
+
+    public void UpdateAnimation(DateTime t)
+    {
+        if ((t - lastFrame).TotalMilliseconds >= AnimationTimer)
+        {
+            AnimationFrame++;
+            lastFrame = DateTime.Now;
+        }
+
+        if (AnimationFrame >= Frames[CurrentState].Count)
+            AnimationFrame = 0;
+        
+        Frame = Frames[CurrentState][AnimationFrame];
+    }
     public void ChangeSpriteDirectionX(Graphics g)
     {
         getDirection();
         int directionValue = (int)(Direction);
         if (directionValue == -1)
-            g.TranslateTransform((this.Position.X + 2 * this.Frame.Size.Width) * 2, 0);
+            g.TranslateTransform((this.Position.X + 2 * Frame.Size.Width) * 2, 0);
         g.ScaleTransform(directionValue, 1);
     }
     public void getDirection()
         => this.Direction = this.Position.X > Enemy.Position.X?
             FighterDirection.LEFT : FighterDirection.RIGHT;
     
+    #region Handle
     // ?Basic Movement Functions
     public void handleWalkingLeft()
     {
@@ -264,4 +292,139 @@ public abstract class Fighter : Entity
 
         this.CurrentState = States.JumpBackward;
     }
+
+    // ?Basic Attack Functions
+    public void handleLightKick()
+    {
+        this.CurrentState = States.LightKick;
+    }
+    public void handleMediumKick()
+    {
+        this.CurrentState = States.MediumKick;
+    }
+    public void handleHeavyKick()
+    {
+        this.CurrentState = States.HeavyKick;
+    }
+    public void handleLightPunch()
+    {
+        this.CurrentState = States.LightPunch;
+    }
+    public void handleMediumPunch()
+    {
+        this.CurrentState = States.MediumPunch;
+    }
+    public void handleHeavyPunch()
+    {
+        this.CurrentState = States.HeavyPunch;
+    }
+    
+    #endregion
+
+    #region StateInit
+    // ?State Init Functions
+    public void initIdle()
+    {
+        this.Velocity.X = 0;
+
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.Idle][AnimationFrame];
+    }
+    public void initBackward()
+    {
+        this.Velocity.X = -250 * (int)Direction;
+
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.Backward][AnimationFrame];
+    }
+    public void initForward()
+    {
+        this.Velocity.X = 250 * (int)Direction;
+
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.Forward][AnimationFrame];
+    }
+    public void initCrouchDown()
+    {
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.CrouchDown][AnimationFrame];
+    }
+    public void initCrouchUp()
+    {
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.CrouchUp][AnimationFrame];
+    }
+    public void initCrouch()
+    {
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.Crouch][AnimationFrame];
+    }
+    public void initJump()
+    {
+        this.Velocity.Y = -800;
+
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.Jump][AnimationFrame];
+    }
+    public void initJumpForward()
+    {
+        this.Velocity.X = 250 * (int)Direction;
+
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.JumpForward][AnimationFrame];
+    }
+    public void initJumpBackward()
+    {
+        this.Velocity.X = -250 * (int)Direction;
+
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.JumpBackward][AnimationFrame];
+    }
+    public void initLightKick()
+    {
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.LightKick][AnimationFrame];
+    }
+    public void initMediumKick()
+    {
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.MediumKick][AnimationFrame];
+    }
+    public void initHeavyKick()
+    {
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.HeavyKick][AnimationFrame];
+    }
+    public void initLightPunch()
+    {
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.LightPunch][AnimationFrame];
+    }
+    public void initMediumPunch()
+    {
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.MediumPunch][AnimationFrame];
+    }
+    public void initHeavyPunch()
+    {
+        this.AnimationTimer = 0;
+        this.AnimationFrame = 0;
+        Frame = Frames[States.HeavyPunch][AnimationFrame];
+    }
+    #endregion
+
 }

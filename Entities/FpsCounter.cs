@@ -9,7 +9,7 @@ public class FpsCounter : Entity
     protected bool toggleDraw = false;
     protected bool show = false;
 
-    public void Update(Graphics g, TimeSpan t)
+    public void Update(Graphics g, DateTime t)
     {
         queue.Enqueue(DateTime.Now);
 
