@@ -6,6 +6,9 @@ public class FpsCounter : Entity
     private Queue<DateTime> queue = new Queue<DateTime>();
     private DateTime oldDateTime;
 
+    protected bool toggleDraw = false;
+    protected bool show = false;
+
     public void Update(Graphics g, TimeSpan t)
     {
         queue.Enqueue(DateTime.Now);
@@ -21,15 +24,28 @@ public class FpsCounter : Entity
 
             Fps = (int)(1000 / totalMilliseconds);
         }
+
+        
+        if ( Control.KeyMapping.Map[Keys.OemMinus] && !show)
+            show = true;
+
+        if (!Control.KeyMapping.Map[Keys.OemMinus]  && show)
+        {
+            toggleDraw = !toggleDraw;
+            show = false;
+        }
     }
 
     public void Draw(Graphics g)
-        => g.DrawString(
+    {
+        if (toggleDraw)
+            g.DrawString(
             $"{Fps.ToString()}fps",
             new Font("arial", 10),
             Brushes.Black,
             new PointF(0, 0)
         );
+    }
 
     public void DrawDebug(Graphics g)
     {

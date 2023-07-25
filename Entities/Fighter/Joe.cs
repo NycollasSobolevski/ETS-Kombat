@@ -4,8 +4,8 @@ public class Joe : Fighter
 {
     public Joe()
     {
-        // this.Image =  new Bitmap("./Assets/Sprites/Joe.png");            //! DOTNET RUN
-        this.Image =  new Bitmap("../../../Assets/Sprites/Joe.png");        //! DEBUG
+        this.Image =  new Bitmap("./Assets/Sprites/Joe.png");            //! DOTNET RUN
+        // this.Image =  new Bitmap("../../../Assets/Sprites/Joe.png");        //! DEBUG
         this.Position = new Point(800, 1080 - STAGE_FLOOR);
         this.Size = new Size(200, 236);
         this.AnimationTimer = 1;
@@ -270,7 +270,7 @@ public class Joe : Fighter
         }
         
         this.Frames.Add(
-            States.MediumPuch,
+            States.MediumPunch,
             frames
         );
     }    
