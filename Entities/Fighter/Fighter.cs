@@ -52,8 +52,8 @@ public abstract class Fighter : Entity
             g.DrawRectangle(
                 Pens.Red,
                 new Rectangle(
-                    (int)Position.X,
-                    (int)Position.Y,
+                    (int)Frame.HitBox.X,
+                    (int)Frame.HitBox.Y,
                     (int)Frame.HitBox.Width,
                     (int)Frame.HitBox.Height
                 )

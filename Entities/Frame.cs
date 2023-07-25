@@ -5,7 +5,8 @@ public class Frame
     public Point PointInSpriteSheet { get; set; }
     public Point OriginPoint { get; set; }
     public RectangleF PushBox { get; set; } 
-    public RectangleF HitBox { get; set; } 
+    public RectangleF HitBox { get; set; }
+    public RectangleF HitBoxInit { get; set; }
     public RectangleF ThrowBox { get; set; } 
     public RectangleF HurtBox { get; set; } 
 
