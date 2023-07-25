@@ -4,8 +4,8 @@ public class Joe : Fighter
 {
     public Joe()
     {
-        this.Image =  new Bitmap("./Assets/Sprites/Joe.png");            //! DOTNET RUN
-        // this.Image =  new Bitmap("../../../Assets/Sprites/Joe.png");        //! DEBUG
+        // this.Image =  new Bitmap("./Assets/Sprites/Joe.png");            //! DOTNET RUN
+        this.Image =  new Bitmap("../../../Assets/Sprites/Joe.png");        //! DEBUG
         this.Position = new Point(800, 1080 - STAGE_FLOOR);
         this.Size = new Size(200, 236);
         this.AnimationTimer = 1;
@@ -31,6 +31,7 @@ public class Joe : Fighter
             Frame.ToRectangle(),
             GraphicsUnit.Pixel
         );
+        g.DrawString($"Hitbox position: {this.Frame.HitBox.X}, {this.Frame.HitBox.Y}", new Font("Arial", 12), Brushes.Black, new PointF(10,10));
 
         g.EndContainer(container);
         this.DrawDebug(g);
@@ -38,16 +39,24 @@ public class Joe : Fighter
 
     public override void Update(Graphics g, TimeSpan t)
     {
-        this.Move(t);
-        this.UpdateStageConstraints();
-
         this.Frame.HurtBox = new RectangleF(
-            this.Rectangle.X + 30,
-            this.Rectangle.Y + 30,
+            this.Rectangle.X,
+            this.Rectangle.Y,
             this.Frame.HurtBox.Width,
             this.Frame.HurtBox.Height   
         );
-        
+
+        this.Frame.HitBox = new RectangleF(
+            this.Rectangle.X + this.Frame.HitBoxInit.X,
+            this.Rectangle.Y + this.Frame.HitBoxInit.Y,
+            this.Frame.HitBoxInit.Width,
+            this.Frame.HitBoxInit.Height   
+        );
+
+        this.Move(t);
+        this.UpdateStageConstraints();
+
+
         if (DateTime.Now - lastFrame > TimeSpan.FromMilliseconds(60))
         {
             AnimationFrame++;
@@ -56,7 +65,6 @@ public class Joe : Fighter
 
         if (AnimationFrame >= Frames[CurrentState].Count)
             AnimationFrame = 0;
-        
     }
 
 
@@ -78,6 +86,8 @@ public class Joe : Fighter
         setHurtboxes(States.Jump);
         setHurtboxes(States.JumpBackward);
         setHurtboxes(States.Crouch);
+
+        setHitboxes();
     }
 
     #region 
@@ -206,8 +216,6 @@ public class Joe : Fighter
     }
     void setCrouchFrames()
     {
-        setCrouchDownFrames();
-        setCrouchUpFrames();
 
         List<Frame> frames = new List<Frame>();
         int row = 6 ;
@@ -222,6 +230,9 @@ public class Joe : Fighter
             States.Crouch,
             frames
         );
+
+        setCrouchDownFrames();
+        setCrouchUpFrames();
     }
     void setLightPunchFrames()
     {
@@ -268,7 +279,7 @@ public class Joe : Fighter
         List<Frame> frames = new List<Frame>();
         int row = 6;
 
-        for (int i = 1; i > 0; i--)
+        for (int i = 1; i >= 0; i--)
         {
             frames.Add(
                 new Frame(
@@ -374,13 +385,10 @@ public class Joe : Fighter
                 Frames[States.JumpBackward][i].HurtBox = hurtboxes[i];
         }
     }
-    private void setHitboxes(States state)
+    private void setHitboxes()
     {
-        if (state == States.LightPunch)
-        {
-            // Frames[]
-            // RectangleF rects = new RectangleF(0,0,100,118);
-        }
+        this.Frames[States.LightPunch][1].HitBoxInit =
+            new RectangleF( 80, 40, 110, 40 );
     }
     
     #endregion 
