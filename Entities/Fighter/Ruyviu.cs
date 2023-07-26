@@ -37,8 +37,12 @@ public class Ruyviu : Fighter
     public override void Update(Graphics g, DateTime t)
     {
         var container = g.BeginContainer();
+        Move(t);
         this.UpdateAnimation(t);
         this.UpdateStageConstraints();
+
+        this.StateObjects[CurrentState].Update(t);
+
         g.EndContainer(container);
     }
 

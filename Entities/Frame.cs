@@ -8,8 +8,7 @@ public class Frame
     public RectangleF HitBox { get; set; }
     public RectangleF HitBoxInit { get; set; }
     public RectangleF ThrowBox { get; set; } 
-    public RectangleF HurtBox { get; set; } 
-
+    public RectangleF HurtBox { get; set; }
     public Frame(Point pointInSpriteSheet, Size size, Point originPoint)
     {
         PointInSpriteSheet = pointInSpriteSheet;

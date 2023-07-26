@@ -37,6 +37,8 @@ public class Joe : Fighter
 
     public override void Update(Graphics g, DateTime t)
     {
+        Move(t);
+
         Frame.HurtBox = new RectangleF(
             this.Rectangle.X,
             this.Rectangle.Y,

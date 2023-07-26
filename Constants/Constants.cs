@@ -27,4 +27,16 @@ public enum States
     HeavyKick,
 }
 
+public class FighterStateObject
+{
+    public Action<DateTime> Update { get; set; }
+    public Action Init { get; set; }
+    public List<States> ValidFrom { get; set; }
+    public FighterStateObject(Action init, Action<DateTime> update, List<States> validFrom)
+    {
+        Init = init;
+        Update = update;
+        this.ValidFrom = validFrom;
+    }
+}
 
