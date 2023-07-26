@@ -47,6 +47,9 @@ public static class Control
                 { Keys.NumPad4, false},
                 { Keys.NumPad5, false},
                 { Keys.NumPad6, false},
+
+                { Keys.Q, false},
+                { Keys.E, false},
                 
                 { Keys.OemMinus, false},
             };
@@ -101,6 +104,10 @@ public static class Control
             state = States.MediumPunch;
         if (KeyMapping.Map[Keys.O])
             state = States.HeavyPunch;
+        if (KeyMapping.Map[Keys.Q])
+            state = States.JumpBackward;
+        if (KeyMapping.Map[Keys.E])
+            state = States.JumpForward;
 
         return state;
     }

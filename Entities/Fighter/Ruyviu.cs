@@ -101,6 +101,16 @@ public class Ruyviu : Fighter
                 )
             );
         }
+        for (int i = 3; i > 1; i--)
+        {
+            frames.Add(
+                new Frame(
+                    new Point(360 + (100 * i), 179 + (118 * row)),
+                    new Size(100, 118),
+                    new Point(0, 0)
+                )
+            );
+        }
 
         this.Frames.Add(
             States.Idle,
@@ -218,7 +228,7 @@ public class Ruyviu : Fighter
         List<Frame> frames = new List<Frame>();
         int row = 7;
 
-        for (int i = 5; i >= 0 ; i--)
+        for (int i = 4; i > 0 ; i--)
         {
             frames.Add(
                 new Frame(

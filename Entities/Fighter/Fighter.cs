@@ -118,7 +118,8 @@ public abstract class Fighter : Entity
                 new List<States>(){
                     States.CrouchDown
                 })
-            }
+            },
+
         };
     }
 
@@ -190,54 +191,13 @@ public abstract class Fighter : Entity
     public void ChangeState(States newState)
     {
         if (StateObjects[newState].ValidFrom.Contains(this.CurrentState) || newState == this.CurrentState)
-            switch(newState)
-            {
-                case States.Backward:
-                    initBackward();
-                    break;
-                case States.Forward:
-                    initForward();
-                    break;
-                case States.Idle:
-                    initIdle();
-                    break;
-                case States.CrouchDown:
-                    initCrouchDown();
-                    break;
-                case States.CrouchUp:
-                    initCrouchUp();
-                    break;
-                case States.Crouch:
-                    initCrouch();
-                    break;
-                case States.Jump:
-                    initJump();
-                    break;
-                case States.JumpForward:
-                    initJumpForward();
-                    break;
-                case States.JumpBackward:
-                    initJumpBackward();
-                    break;
-                case States.LightKick:
-                    initLightKick();
-                    break;
-                case States.MediumKick:
-                    initMediumKick();
-                    break;
-                case States.HeavyKick:
-                    initHeavyKick();
-                    break;
-                case States.LightPunch:
-                    initLightPunch();
-                    break;
-                case States.MediumPunch:
-                    initMediumPunch();
-                    break;
-                case States.HeavyPunch:
-                    initHeavyPunch();
-                    break;
-            }
+        {
+            this.CurrentState = newState;
+            StateObjects[this.CurrentState].Init();
+
+            // StateObjects[States.Jump].Init();
+        }
+
     }
     
     public void UpdateStageConstraints()
@@ -258,6 +218,10 @@ public abstract class Fighter : Entity
     public void Move(DateTime t)
     {
         var calc = (t - lastFrame).TotalSeconds;
+
+        // apply gravity
+        this.Velocity.Y += Gravity * (float)calc;
+
         this.Position = new PointF(
             (float)(this.Position.X + Velocity.X * calc),
             (float)(this.Position.Y + Velocity.Y * calc)
@@ -292,27 +256,31 @@ public abstract class Fighter : Entity
             FighterDirection.LEFT : FighterDirection.RIGHT;
     
     #endregion
-    #region Handle
-    // ?Basic Movement Functions
+    #region HandleState
     public void handleBackward(DateTime t)
     {
-        
+        if (Control.KeyMapping.Map[Keys.A])
+            this.Velocity.X = -250 * (int)Direction;
     }
     public void handleForward(DateTime t)
     {
-
+        if (Control.KeyMapping.Map[Keys.D])
+            this.Velocity.X = 250 * (int)Direction;
     }
     public void handleIdle(DateTime t)
     {
-
+        this.Velocity.X = 0;
+        this.Velocity.Y = 0;
     }
     public void handleCrouchDown(DateTime t)
     {
-        this.CurrentState = States.CrouchDown;
-        isCrouching = AnimationFrame >= 1;
+        if (Control.KeyMapping.Map[Keys.S])
+        {
+            isCrouching = AnimationFrame >= 1;
 
-        if (isCrouching)
-            this.CurrentState = States.Crouch;
+            if (isCrouching)
+                this.CurrentState = States.Crouch;
+        }
     }
     public void handleCrouchUp(DateTime t)
     {
@@ -332,16 +300,17 @@ public abstract class Fighter : Entity
     }
     public void handleJump(DateTime t)
     { 
-        this.Velocity.Y += (this.Gravity * (t - lastFrame).Seconds);
-        this.CurrentState = States.Jump;
+        // this.Velocity.Y += Gravity * (float)(t - lastFrame).TotalSeconds;
     }
     public void handleJumpForward(DateTime t)
     {
-
+        handleJump(t);
+        this.Velocity.X = 250 * (int)Direction;
     }
     public void handleJumpBackward(DateTime t)
     {
-
+        handleJump(t);
+        this.Velocity.X = -250 * (int)Direction;
     }
     public void handleLightKick(DateTime t)
     {
@@ -373,6 +342,8 @@ public abstract class Fighter : Entity
     public void initIdle()
     {
         this.Velocity.X = 0;
+        this.Velocity.Y = 0;
+
     }
     public void initBackward()
     {
@@ -397,15 +368,17 @@ public abstract class Fighter : Entity
     public void initJump()
     {
         this.Velocity.Y = -800;
-        this.Gravity = 1000;
+        this.Gravity = 4_300;
         isJumping = true;
     }
     public void initJumpForward()
     {
+        this.initJump();
         this.Velocity.X = 250 * (int)Direction;
     }
     public void initJumpBackward()
     {
+        this.initJump();
         this.Velocity.X = -250 * (int)Direction;
     }
     public void initLightKick()
