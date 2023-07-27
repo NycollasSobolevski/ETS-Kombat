@@ -27,7 +27,7 @@ public class FightForm
         Ruyviu figther1 = new Ruyviu(new PointF(400, 1000), 1000);
         all_entities.Add(figther1);
 
-        Ruyviu fighter2 = new Ruyviu(new PointF(800, 1000), 1000);
+        Kaqui fighter2 = new Kaqui(new PointF(800, 1000), 1000);
         all_entities.Add(fighter2);
 
         figther1.Enemy = fighter2;
