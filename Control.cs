@@ -1,6 +1,5 @@
 
-using Microsoft.VisualBasic.Devices;
-
+#pragma warning disable
 public static class Control
 {
     // For player 1 controls
@@ -74,24 +73,43 @@ public static class Control
     public static States GetState(Entity entity)
     {
         if (entity is Ruyviu)
-            return GetRuyviuState();
+            return GetRuyviuState(entity as Ruyviu);
         else if (entity is Joe)
-            return GetJoeState();
+            return GetJoeState(entity as Joe);
         else
             return States.Idle;
     }
 
-    private static States GetRuyviuState()
+    private static bool isCrouchingP1;
+    private static bool isCrouchingP2;
+    private static States GetRuyviuState(Ruyviu r)
     {
         States state = States.Idle;
-        if (KeyMapping.Map[Keys.D])
-            state = States.Forward;
+
         if (KeyMapping.Map[Keys.A])
-            state = States.Backward;
+            if (r.Direction == FighterDirection.LEFT)
+                state = States.Forward;
+            else
+                state = States.Backward;
+        if (KeyMapping.Map[Keys.D])
+            if (r.Direction == FighterDirection.LEFT)
+                state = States.Backward;
+            else
+                state = States.Forward;
         if (KeyMapping.Map[Keys.W])
             state = States.Jump;
+
         if (KeyMapping.Map[Keys.S])
-            state = States.Crouch;
+        {
+            state = States.CrouchDown;
+            isCrouchingP1 = true;
+        }
+        if (isCrouchingP1 && !KeyMapping.Map[Keys.S])
+        {
+            state = States.CrouchUp;
+            isCrouchingP1 = false;
+        }
+
         if (KeyMapping.Map[Keys.J])
             state = States.LightKick;
         if (KeyMapping.Map[Keys.K])
@@ -104,25 +122,43 @@ public static class Control
             state = States.MediumPunch;
         if (KeyMapping.Map[Keys.O])
             state = States.HeavyPunch;
-        if (KeyMapping.Map[Keys.Q])
-            state = States.JumpBackward;
-        if (KeyMapping.Map[Keys.E])
+
+        if (KeyMapping.Map[Keys.D] && KeyMapping.Map[Keys.W])
             state = States.JumpForward;
+        if (KeyMapping.Map[Keys.A] && KeyMapping.Map[Keys.W])
+            state = States.JumpBackward;
 
         return state;
     }
 
-    private static States GetJoeState()
+    private static States GetJoeState(Joe j)
     {
         States state = States.Idle;
-        if (KeyMapping.Map[Keys.Right])
-            state = States.Forward;
         if (KeyMapping.Map[Keys.Left])
-            state = States.Backward;
+            if (j.Direction == FighterDirection.LEFT)
+                state = States.Forward;
+            else
+                state = States.Backward;
+        if (KeyMapping.Map[Keys.Right])
+            if (j.Direction == FighterDirection.LEFT)
+                state = States.Backward;
+            else
+                state = States.Forward;
+
         if (KeyMapping.Map[Keys.Up])
             state = States.Jump;
+
         if (KeyMapping.Map[Keys.Down])
-            state = States.Crouch;
+        {
+            state = States.CrouchDown;
+            isCrouchingP2 = true;
+        }
+        if (isCrouchingP2 && !KeyMapping.Map[Keys.Down])
+        {
+            state = States.CrouchUp;
+            isCrouchingP2 = false;
+        }
+
         if (KeyMapping.Map[Keys.NumPad1])
             state = States.LightKick;
         if (KeyMapping.Map[Keys.NumPad2])

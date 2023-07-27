@@ -49,11 +49,13 @@ public class FightForm
             foreach (var item in all_entities)
                 item.Draw(g);
             
-            // k.CurrentState =
-            //     Control.GetState(k);
+            k.ChangeState(
+                Control.GetState(k)
+            );
             
-            j.CurrentState =
-                States.Idle;
+            j.ChangeState(
+                Control.GetState(j)
+            );
 
             pb.Refresh();
         };

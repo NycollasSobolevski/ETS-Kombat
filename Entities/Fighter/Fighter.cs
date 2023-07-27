@@ -60,7 +60,10 @@ public abstract class Fighter : Entity
                 States.Idle,
                 new FighterStateObject(initIdle, handleIdle,
                 new List<States>(){
-                    States.Backward, States.Forward, States.CrouchUp, States.Jump
+                    States.Backward, States.Forward,
+                    States.CrouchUp,
+                    States.LightKick, States.MediumKick, States.HeavyKick,
+                    States.LightPunch, States.MediumPunch, States.HeavyPunch,
                 })
             },
             {
@@ -88,21 +91,21 @@ public abstract class Fighter : Entity
                 States.Backward,
                 new FighterStateObject(initBackward, handleBackward,
                 new List<States>(){
-                    States.Idle, States.JumpBackward
+                    States.Idle, States.Forward
                 })
             },
             {
                 States.Forward,
                 new FighterStateObject(initForward, handleForward,
                 new List<States>(){
-                    States.Idle, States.JumpForward
+                    States.Idle, States.Backward
                 })
             },
             {
                 States.CrouchDown,
                 new FighterStateObject(initCrouchDown, handleCrouchDown,
                 new List<States>(){
-                    States.Idle
+                    States.Idle, States.Backward, States.Forward
                 })
             },
             {
@@ -188,18 +191,6 @@ public abstract class Fighter : Entity
             new PointF(this.Position.X, 0)
         );        
     }
-    public void ChangeState(States newState)
-    {
-        if (StateObjects[newState].ValidFrom.Contains(this.CurrentState) || newState == this.CurrentState)
-        {
-            this.CurrentState = newState;
-            StateObjects[this.CurrentState].Init();
-
-            // StateObjects[States.Jump].Init();
-        }
-
-    }
-    
     public void UpdateStageConstraints()
     {
         if (this.Position.X > ScreenSize.Width - Stage.FIGHTER_WIDTH - this.Size.Width)
@@ -229,6 +220,14 @@ public abstract class Fighter : Entity
     }
     
     # region SpriteDirection
+    public void ChangeState(States newState)
+    {
+        if (StateObjects[newState].ValidFrom.Contains(this.CurrentState))
+        {
+            this.CurrentState = newState;
+            StateObjects[this.CurrentState].Init();
+        }
+    }
     public void UpdateAnimation(DateTime t)
     {
         AnimationTimer = 60;
@@ -368,7 +367,7 @@ public abstract class Fighter : Entity
     public void initJump()
     {
         this.Velocity.Y = -800;
-        this.Gravity = 4_300;
+        this.Gravity = 1_000;
         isJumping = true;
     }
     public void initJumpForward()
