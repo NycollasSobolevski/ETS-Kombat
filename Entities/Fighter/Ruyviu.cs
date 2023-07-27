@@ -9,31 +9,25 @@ public class Ruyviu : Fighter
         this.Size = new Size(200, 236);
         this.AnimationTimer = 1;
         Direction = FighterDirection.RIGHT;
-
-        setForwardFrames();
-        setBackwardFrames();
-        setIdleFrames();
-        setJumpingFrames();
-        setCrouchFrames();
     }
 
-    public override void Draw(Graphics g)
-    {
-        var container = g.BeginContainer();
+    // public override void Draw(Graphics g)
+    // {
+    //     var container = g.BeginContainer();
 
-        ChangeState(CurrentState);
-        this.ChangeSpriteDirectionX(g);
+    //     ChangeState(CurrentState);
+    //     this.ChangeSpriteDirectionX(g);
 
-        g.DrawImage(
-            this.Image,
-            this.Rectangle,
-            new Rectangle(Frame.PointInSpriteSheet.X, Frame.PointInSpriteSheet.Y, Frame.Size.Width, Frame.Size.Height),
-            GraphicsUnit.Pixel
-        );
+    //     g.DrawImage(
+    //         this.Image,
+    //         this.Rectangle,
+    //         new Rectangle(Frame.PointInSpriteSheet.X, Frame.PointInSpriteSheet.Y, Frame.Size.Width, Frame.Size.Height),
+    //         GraphicsUnit.Pixel
+    //     );
 
-        g.EndContainer(container);
-        this.DrawDebug(g);
-    }
+    //     g.EndContainer(container);
+    //     this.DrawDebug(g);
+    // }
     public override void Update(Graphics g, DateTime t)
     {
         var container = g.BeginContainer();
@@ -47,7 +41,7 @@ public class Ruyviu : Fighter
     }
 
     //! ANIMATION FRAMES AND SPRITES
-    void setForwardFrames()
+    protected override void setForwardFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 1;
@@ -65,7 +59,7 @@ public class Ruyviu : Fighter
 
         this.Frames.Add(States.Forward, frames);
     }
-    void setBackwardFrames()
+    protected override void setBackwardFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 2;
@@ -86,7 +80,7 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    void setIdleFrames()
+    protected override void setIdleFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 0;
@@ -117,7 +111,7 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    void setCrouchFrames()
+    protected override void setCrouchFrames()
     {
         setCrouchDownFrames();
         setCrouchUpFrames();
@@ -136,7 +130,7 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    private void setCrouchUpFrames()
+    protected override void setCrouchUpFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 6;
@@ -157,7 +151,7 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    private void setCrouchDownFrames()
+    protected override void setCrouchDownFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 6;
@@ -178,7 +172,7 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    void setJumpingFrames()
+    protected override void setJumpingFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 4;
@@ -202,7 +196,7 @@ public class Ruyviu : Fighter
         this.setJumpingFFrames();
         this.setJumpingBFrames();
     }
-    private void setJumpingFFrames()
+    protected override void setJumpingFFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 7;
@@ -223,7 +217,7 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    private void setJumpingBFrames()
+    protected override void setJumpingBFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 7;

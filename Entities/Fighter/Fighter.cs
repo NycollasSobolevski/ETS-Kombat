@@ -3,10 +3,9 @@
 
 public abstract class Fighter : Entity
 {   
-    // *Basic Props
     # region BasicProps
     public abstract void Update(Graphics g, DateTime t);
-    public abstract void Draw(Graphics g);
+
     // protected static Dictionary<States, States[]> validStates = new Dictionary<States, States[]>() {
     //     {States.Backward, new States[] {States.Backward, States.Idle}},
     //     {States.Forward, new States[] {States.Forward, States.Idle}},
@@ -51,9 +50,12 @@ public abstract class Fighter : Entity
     protected bool isCrouching = false;
     public Fighter Enemy { get; set; }
     public Dictionary<States, FighterStateObject> StateObjects;
+    public bool Debug { get; set; }
     #endregion
     public Fighter()
     {
+        SetData();
+
         StateObjects = new Dictionary<States, FighterStateObject>()
         {
             {   
@@ -125,8 +127,24 @@ public abstract class Fighter : Entity
 
         };
     }
+    public void Draw(Graphics g)
+    {
+        var container = g.BeginContainer();
+        
+        this.ChangeSpriteDirectionX(g);
+        ChangeState(CurrentState);
 
-    // !FUNCTIONS
+        g.DrawImage(
+            this.Image,
+            this.Rectangle,
+            Frame.ToRectangle(),
+            GraphicsUnit.Pixel
+        );
+        g.EndContainer(container);
+        
+        if (Debug)
+            this.DrawDebug(g);
+    }
     public virtual void DrawDebug(Graphics g)
     {
         g.FillRectangle(
@@ -188,69 +206,70 @@ public abstract class Fighter : Entity
             $"State: {this.CurrentState}",
             new Font("arial", 10),
             Brushes.Black,
-            new PointF(this.Position.X, 0)
+            new PointF(this.Direction == FighterDirection.LEFT ? 0 : ScreenSize.Width - 300, 0)
         );        
-    }
-    public void UpdateStageConstraints()
-    {
-        if (this.Position.X > ScreenSize.Width - Stage.FIGHTER_WIDTH - this.Size.Width)
-            this.Position = new PointF(ScreenSize.Width - Stage.FIGHTER_WIDTH - this.Size.Width, this.Position.Y);
-    
-        if (this.Position.X < 0 + Stage.FIGHTER_WIDTH)
-            this.Position = new PointF(Stage.FIGHTER_WIDTH, this.Position.Y);
-        
-        if (this.Position.Y > this.ScreenSize.Height - Stage.STAGE_FLOOR)
-        {
-            this.Position = new Point((int)this.Position.X, this.ScreenSize.Height - Stage.STAGE_FLOOR);
-            this.CurrentState = States.Idle;
-        }
-            
-    }
-    public void Move(DateTime t)
-    {
-        var calc = (t - lastFrame).TotalSeconds;
-
-        // apply gravity
-        this.Velocity.Y += Gravity * (float)calc;
-
-        this.Position = new PointF(
-            (float)(this.Position.X + Velocity.X * calc),
-            (float)(this.Position.Y + Velocity.Y * calc)
-        );
     }
     
     # region SpriteDirection
-    public void ChangeState(States newState)
-    {
-        if (StateObjects[newState].ValidFrom.Contains(this.CurrentState))
+        public void UpdateStageConstraints()
         {
-            this.CurrentState = newState;
-            StateObjects[this.CurrentState].Init();
+            if (this.Position.X > ScreenSize.Width - Stage.FIGHTER_WIDTH - this.Size.Width)
+                this.Position = new PointF(ScreenSize.Width - Stage.FIGHTER_WIDTH - this.Size.Width, this.Position.Y);
+        
+            if (this.Position.X < 0 + Stage.FIGHTER_WIDTH)
+                this.Position = new PointF(Stage.FIGHTER_WIDTH, this.Position.Y);
+            
+            if (this.Position.Y > this.ScreenSize.Height - Stage.STAGE_FLOOR)
+            {
+                this.Position = new Point((int)this.Position.X, this.ScreenSize.Height - Stage.STAGE_FLOOR);
+                this.CurrentState = States.Idle;
+            }
+                
         }
-    }
-    public void UpdateAnimation(DateTime t)
-    {
-        AnimationTimer = 60;
-        if ((t - lastFrame).TotalMilliseconds > AnimationTimer)
+        public void Move(DateTime t)
         {
-            AnimationFrame++;
-            lastFrame = DateTime.Now;
+            var calc = (t - lastFrame).TotalSeconds;
+
+            // apply gravity
+            this.Velocity.Y += Gravity * (float)calc;
+
+            this.Position = new PointF(
+                (float)(this.Position.X + Velocity.X * calc),
+                (float)(this.Position.Y + Velocity.Y * calc)
+            );
         }
 
-        if (AnimationFrame >= Frames[CurrentState].Count)
-            AnimationFrame = 0;
-        
-        Frame = Frames[CurrentState][AnimationFrame];
-    }
-    public void ChangeSpriteDirectionX(Graphics g)
-    {
-        getDirection();
-        int directionValue = (int)(Direction);
-        if (directionValue == -1)
-            g.TranslateTransform((this.Position.X + 2 * Frame.Size.Width) * 2, 0);
-        g.ScaleTransform(directionValue, 1);
-    }
-    public void getDirection()
+        public void ChangeState(States newState)
+        {
+            if (StateObjects[newState].ValidFrom.Contains(this.CurrentState))
+            {
+                this.CurrentState = newState;
+                StateObjects[this.CurrentState].Init();
+            }
+        }
+        public void UpdateAnimation(DateTime t)
+        {
+            AnimationTimer = 60;
+            if ((t - lastFrame).TotalMilliseconds > AnimationTimer)
+            {
+                AnimationFrame++;
+                lastFrame = DateTime.Now;
+            }
+
+            if (AnimationFrame >= Frames[CurrentState].Count)
+                AnimationFrame = 0;
+            
+            Frame = Frames[CurrentState][AnimationFrame];
+        }
+        public void ChangeSpriteDirectionX(Graphics g)
+        {
+            getDirection();
+            int directionValue = (int)(Direction);
+            if (directionValue == -1)
+                g.TranslateTransform((this.Position.X + 2 * Frame.Size.Width) * 2, 0);
+            g.ScaleTransform(directionValue, 1);
+        }
+        public void getDirection()
         => this.Direction = this.Position.X > Enemy.Position.X?
             FighterDirection.LEFT : FighterDirection.RIGHT;
     
@@ -406,4 +425,368 @@ public abstract class Fighter : Entity
     }
     #endregion
 
+    #region SetData
+    public void SetData()
+    {
+        setFrames();
+        setHurtboxes();
+        setHitboxes();
+        setPushboxes();
+        setThrowboxes();
+        Frame = Frames[States.Idle][0];
+    }
+    #region setFrames
+        protected virtual void setFrames()
+        {
+            setIdleFrames();
+            setForwardFrames();
+            setBackwardFrames();
+            setJumpingFrames();
+            setCrouchFrames();
+            setLightPunchFrames();
+            setMediumPunchFrames();
+        }
+        protected virtual void setForwardFrames()
+        {
+            List<Frame> frames = new List<Frame>();
+            int row = 1;
+
+            for (int i = 0; i < 5; i++)
+            {
+                frames.Add( 
+                    new Frame(
+                        new Point(360 + (100 * i), 179 + (118 * row)),
+                        new Size(100, 118),
+                        new Point(0, 0)
+                    )
+                );
+            }
+
+            Frames.Add(States.Forward, frames);
+        }
+        protected virtual void setBackwardFrames()
+        {
+            List<Frame> frames = new List<Frame>();
+            int row = 2;
+
+            for (int i = 0; i < 5; i++)
+            {
+                frames.Add(
+                    new Frame(
+                        new Point(360 + (100 * i), 179 + (118 * row)),
+                        new Size(100, 118),
+                        new Point(0, 0)
+                    )
+                );
+            }
+
+            Frames.Add(
+                States.Backward,
+                frames
+            );
+        }
+        protected virtual void setIdleFrames()
+        {
+            List<Frame> frames = new List<Frame>();
+            int row = 0;
+
+            for (int i = 0; i < 5; i++)
+            {
+                frames.Add(
+                    new Frame(
+                        new Point(360 + (100 * i), 179 + (118 * row)),
+                        new Size(100, 118),
+                        new Point(0, 0)
+                    )
+                );
+            }
+
+            Frames.Add(
+                States.Idle,
+                frames
+            );
+        }
+        protected virtual void setJumpingFrames()
+        {
+            List<Frame> frames = new List<Frame>();
+            int row = 4;
+
+            for (int i = 0; i < 5; i++)
+            {
+                Frame frame = new Frame(
+                    new Point(360 + (100 * i), 179 + (118 * row)),
+                    new Size(100, 118),
+                    new Point(0, 0)
+                );
+                frames.Add(frame);
+            }
+            Frames.Add(
+                States.Jump,
+                frames
+            );
+            setJumpingBFrames();   
+            setJumpingFFrames();   
+        }
+        protected virtual void setJumpingFFrames()
+        {
+            List<Frame> frames = new List<Frame>();
+            int row = 4;
+
+            for (int i = 0; i < 5 ; i++)
+            {
+                frames.Add(
+                    new Frame(
+                        new Point(360 + (100 * i), 179 + (118 * row)),
+                        new Size(100, 118),
+                        new Point(0, 0)
+                    )
+                );
+            }
+
+            Frames.Add(
+                States.JumpForward,
+                frames
+            );
+        }
+        protected virtual void setJumpingBFrames()
+        {
+            List<Frame> frames = new List<Frame>();
+            int row = 4;
+
+            for (int i = 4; i >= 0 ; i--)
+            {
+                frames.Add(
+                    new Frame(
+                        new Point(360 + (100 * i), 179 + (118 * row)),
+                        new Size(100, 118),
+                        new Point(0, 0)
+                    )
+                );
+            }
+
+            Frames.Add(
+                States.JumpBackward,
+                frames
+            );
+        }
+        protected virtual void setCrouchFrames()
+        {
+
+            List<Frame> frames = new List<Frame>();
+            int row = 6 ;
+
+            frames.Add(new Frame(
+                new Point(360 + 200, 179 + (118 * row)),
+                new Size(100, 118),
+                new Point(0, 0)
+            ));
+
+            Frames.Add(
+                States.Crouch,
+                frames
+            );
+
+            setCrouchDownFrames();
+            setCrouchUpFrames();
+        }
+        protected virtual void setLightPunchFrames()
+        {
+            List<Frame> frames = new();
+            int row = 3 ;
+
+            for (int i = 0; i < 2; i++)
+            {
+                Frame frame = new Frame(
+                    new Point(360 + (120 * i), 179 + (118 * row)),
+                    new Size(120, 118),
+                    new Point(0, 0)
+                );
+                frames.Add(frame);
+            }
+            
+            Frames.Add(
+                States.LightPunch,
+                frames
+            );
+        }    
+        protected virtual void setMediumPunchFrames()
+        {
+            List<Frame> frames = new();
+            int row = 3 ;
+
+            for (int i = 0; i < 2; i++)
+            {
+                Frame frame = new Frame(
+                    new Point(660 + (120 * i), 179 + (118 * row)),
+                    new Size(120, 118),
+                    new Point(0, 0)
+                );
+                frames.Add(frame);
+            }
+            
+            Frames.Add(
+                States.MediumPunch,
+                frames
+            );
+        }    
+        protected virtual void setCrouchUpFrames()
+        {
+            List<Frame> frames = new List<Frame>();
+            int row = 6;
+
+            for (int i = 1; i >= 0; i--)
+            {
+                frames.Add(
+                    new Frame(
+                        new Point(360 + (100 * i), 179 + (118 * row)),
+                        new Size(100, 118),
+                        new Point(0, 0)
+                    )
+                );
+            }
+
+            Frames.Add(
+                States.CrouchUp,
+                frames
+            );
+        }
+        protected virtual void setCrouchDownFrames()
+    {
+        List<Frame> frames = new List<Frame>();
+        int row = 6;
+
+        for (int i = 0; i < 2; i++)
+        {
+            frames.Add(
+                new Frame(
+                    new Point(360 + (100 * i), 179 + (118 * row)),
+                    new Size(100, 118),
+                    new Point(0, 0)
+                )
+            );
+        }
+
+        Frames.Add(
+            States.CrouchDown,
+            frames
+        );
+    }
+    #endregion
+    #region setHurtBoxes
+        protected virtual void setHurtboxes()
+        {
+            setHurtbox(States.Idle);
+            setHurtbox(States.Backward);
+            setHurtbox(States.Jump);
+            setHurtbox(States.JumpBackward);
+            setHurtbox(States.Crouch);
+        }
+        private void setHurtbox(States state)
+        {
+            if (state == States.Jump)
+            {
+                var hurtboxes = new RectangleF[] {
+                    new RectangleF(0, 0, 72 * 2, 115 * 2),
+                    new RectangleF(0, 0, 61 * 2, 105 * 2),
+                    new RectangleF(0, 0, 61 * 2, 80 * 2),
+                    new RectangleF(0, 0, 61 * 2, 105 * 2),
+                    new RectangleF(0, 0, 72 * 2, 115 * 2),
+                };
+
+                for (int i = 0; i < Frames[States.Jump].Count; i++)
+                    Frames[States.Jump][i].HurtBox = hurtboxes[i];
+            }
+            if (state == States.Idle)
+            {
+                var hurtboxes = new RectangleF[] {
+                    new RectangleF(0, 0, (68 * 2), (103 * 2)),
+                    new RectangleF(0, 0, (68 * 2), (103 * 2)),
+                    new RectangleF(0, 0, (68 * 2), (103 * 2)),
+                    new RectangleF(0, 0, (68 * 2), (103 * 2)),
+                    new RectangleF(0, 0, (68 * 2), (103 * 2)),
+                };
+
+                for (int i = 0; i < Frames[States.Idle].Count; i++)
+                    Frames[States.Idle][i].HurtBox = hurtboxes[i];
+            }
+            if (state == States.Backward || state == States.Forward)
+            {
+                var hurtboxes = new RectangleF[] {
+                    new RectangleF(0, 0, (55 * 2), (106 * 2)),
+                    new RectangleF(0, 0, (66 * 2), (105 * 2)),
+                    new RectangleF(0, 0, (80 * 2), (118 * 2)),
+                    new RectangleF(0, 0, (100 * 2), (105 * 2)),
+                    new RectangleF(0, 0, (66 * 2), (105 * 2)),
+                };
+
+                //TODO: backward foreward  
+                for(int i = 0; i < Frames[States.Forward].Count; i++)
+                    Frames[States.Forward][i].HurtBox = hurtboxes[i];
+                for(int i = 0; i < Frames[States.Backward].Count; i++)
+                    Frames[States.Backward][i].HurtBox = hurtboxes[i];            
+            }
+            if (state == States.Crouch)
+            {
+                var hurtboxes = new RectangleF[] {
+                    new RectangleF(0, 0, 72 * 2, 75 * 2),
+                };
+
+                for (int i = 0; i < Frames[States.Crouch].Count; i++)
+                    Frames[States.Crouch][i].HurtBox = hurtboxes[i];
+            }
+            if (state == States.JumpBackward || state == States.JumpForward)
+            {
+                var hurtboxes = new RectangleF[] {
+                    new RectangleF(0, 0, 75*2, 118*2),
+                    new RectangleF(0, 0, 63*2, 104*2),
+                    new RectangleF(0, 0, 60*2, 81*2),
+                    new RectangleF(0, 0, 63*2, 104*2),
+                    new RectangleF(0, 0, 75*2, 118*2),
+                };
+
+                for(int i = 0; i < Frames[States.JumpForward].Count; i++ )
+                    Frames[States.JumpForward][i].HurtBox = hurtboxes[i];
+                for(int i = 0; i < Frames[States.JumpBackward].Count; i++ )
+                    Frames[States.JumpBackward][i].HurtBox = hurtboxes[i];
+            }
+        }
+    #endregion
+    #region setHitboxes
+        protected virtual void setHitboxes()
+        {
+            Frames[States.LightPunch][1].HitBoxInit =
+                new RectangleF( 80, 40, 110, 40 );
+        }
+    #endregion
+    #region setPushboxes
+        protected virtual void setPushboxes()
+        {
+            setPush();
+        }
+        private void setPush()
+        {
+            foreach (States state in Enum.GetValues(typeof(States)))
+            {
+                try
+                {
+                    foreach (var frame in Frames[state])
+                    {
+                        frame.PushBox = new RectangleF(32, 32, 200 * 0.7f, 204);
+                    }
+                }catch (Exception ex){
+                    continue;
+                }
+            }
+        }
+    
+    #endregion
+    
+    //TODO :: setThrowboxes
+    #region setThrowboxes
+        protected virtual void setThrowboxes()
+        {
+            
+        }
+    #endregion
+    #endregion
 }
