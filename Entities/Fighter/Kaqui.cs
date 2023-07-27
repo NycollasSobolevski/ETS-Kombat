@@ -251,4 +251,21 @@ public class Kaqui : Fighter
         this.Frames.Add(States.MediumKick, frames);
     }
     #endregion
+
+    #region Override SetHitboxes
+    //TODO: ========================================================================================================================
+    protected override void setHitboxes()
+    {
+        for (int i = 0; i < Frames[States.Idle].Count; i++)
+            Frames[States.Idle][i].HurtBox = 
+                new RectangleF( this.Position.X, this.Position.Y, 51, 117 );
+        for (int i = 0; i < Frames[States.Forward].Count; i++)
+            Frames[States.Forward][i].HurtBox = 
+                new RectangleF( this.Position.X, this.Position.Y, 51, 117 );
+        for (int i = 0; i < Frames[States.Backward].Count; i++)
+            Frames[States.Backward][i].HurtBox = 
+                new RectangleF( this.Position.X, this.Position.Y, 51, 117 );
+    }
+
+    #endregion
 }
