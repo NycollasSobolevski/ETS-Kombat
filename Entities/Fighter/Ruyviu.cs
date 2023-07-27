@@ -1,6 +1,6 @@
 public class Ruyviu : Fighter
 {
-    public Ruyviu(PointF initialPosition) : base(initialPosition)
+    public Ruyviu(PointF initialPosition, int health) : base(initialPosition, health)
     {
         this.Image =  new Bitmap("./Assets/Sprites/Ruyviu.png");
     }

@@ -4,7 +4,7 @@ using static Stage;
 public class Kaqui : Fighter
 {
 
-    public Kaqui ( PointF inititalPosition) : base(inititalPosition)
+    public Kaqui ( PointF inititalPosition, int hp) : base(inititalPosition, hp)
     {
         this.Image = new Bitmap ("./Assets/Sprites/Kaqui.png");
     }

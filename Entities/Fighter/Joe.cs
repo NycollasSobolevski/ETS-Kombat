@@ -2,7 +2,7 @@ using static Stage;
 
 public class Joe : Fighter
 {
-    public Joe(PointF initialPosition) : base(initialPosition)
+    public Joe(PointF initialPosition, int health) : base(initialPosition, health)
     {
         this.Image =  new Bitmap("./Assets/Sprites/Joe.png");
     }
