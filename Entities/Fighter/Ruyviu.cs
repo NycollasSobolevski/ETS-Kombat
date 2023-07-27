@@ -1,18 +1,23 @@
-using static Stage;
-
 public class Ruyviu : Fighter
 {
-    public Ruyviu(PointF initialPosition)
+    public Ruyviu(PointF initialPosition) : base(initialPosition)
     {
         this.Image =  new Bitmap("./Assets/Sprites/Ruyviu.png");
-        this.Position = new PointF(initialPosition.X, initialPosition.Y - STAGE_FLOOR);
-        this.Size = new Size(200, 236);
-        this.AnimationTimer = 1;
-        Direction = FighterDirection.RIGHT;
+    }
+
+    protected override void setFrames()
+    {
+        setIdleFrames();
+        setForwardFrames();
+        setBackwardFrames();
+        setJumpingFrames();
+        setCrouchFrames();
+        setLightPunchFrames();
+        setMediumPunchFrames();
     }
 
     #region Override SetFrames
-    protected override void setForwardFrames()
+    private void setForwardFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 1;
@@ -30,7 +35,7 @@ public class Ruyviu : Fighter
 
         this.Frames.Add(States.Forward, frames);
     }
-    protected override void setBackwardFrames()
+    private void setBackwardFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 2;
@@ -51,7 +56,7 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    protected override void setIdleFrames()
+    private void setIdleFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 0;
@@ -82,7 +87,7 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    protected override void setCrouchFrames()
+    private void setCrouchFrames()
     {
         setCrouchDownFrames();
         setCrouchUpFrames();
@@ -101,7 +106,7 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    protected override void setCrouchUpFrames()
+    private void setCrouchUpFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 6;
@@ -122,7 +127,7 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    protected override void setCrouchDownFrames()
+    private void setCrouchDownFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 6;
@@ -143,7 +148,7 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    protected override void setJumpingFrames()
+    private void setJumpingFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 4;
@@ -167,7 +172,7 @@ public class Ruyviu : Fighter
         this.setJumpingFFrames();
         this.setJumpingBFrames();
     }
-    protected override void setJumpingFFrames()
+    private void setJumpingFFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 7;
@@ -188,7 +193,7 @@ public class Ruyviu : Fighter
             frames
         );
     }
-    protected override void setJumpingBFrames()
+    private void setJumpingBFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 7;
@@ -209,6 +214,46 @@ public class Ruyviu : Fighter
             frames
         );
     }
+     private void setLightPunchFrames()
+    {
+        List<Frame> frames = new();
+        int row = 3 ;
+
+        for (int i = 0; i < 2; i++)
+        {
+            Frame frame = new Frame(
+                new Point(360 + (120 * i), 179 + (118 * row)),
+                new Size(120, 118),
+                new Point(0, 0)
+            );
+            frames.Add(frame);
+        }
+        
+        Frames.Add(
+            States.LightPunch,
+            frames
+        );
+    }    
+    private void setMediumPunchFrames()
+    {
+        List<Frame> frames = new();
+        int row = 3 ;
+
+        for (int i = 0; i < 2; i++)
+        {
+            Frame frame = new Frame(
+                new Point(660 + (120 * i), 179 + (118 * row)),
+                new Size(120, 118),
+                new Point(0, 0)
+            );
+            frames.Add(frame);
+        }
+        
+        Frames.Add(
+            States.MediumPunch,
+            frames
+        );
+    }    
 
     #endregion
 }

@@ -1,4 +1,5 @@
 #pragma warning disable
+using static Stage;
 
 
 public abstract class Fighter : Entity
@@ -50,10 +51,15 @@ public abstract class Fighter : Entity
     public Fighter Enemy { get; set; }
     public Dictionary<States, FighterStateObject> StateObjects;
     public bool Debug { get; set; } = true;
+    public string Name { get; set; }
     #endregion
-    public Fighter()
+    public Fighter(PointF initialPosition)
     {
         SetData();
+        
+        this.AnimationTimer = 1;
+        this.Size = new Size(200, 236);
+        this.Position = new PointF(initialPosition.X, initialPosition.Y - STAGE_FLOOR);
 
         StateObjects = new Dictionary<States, FighterStateObject>()
         {
@@ -463,7 +469,7 @@ public abstract class Fighter : Entity
             setLightPunchFrames();
             setMediumPunchFrames();
         }
-        protected virtual void setForwardFrames()
+        private void setForwardFrames()
         {
             List<Frame> frames = new List<Frame>();
             int row = 1;
@@ -481,7 +487,7 @@ public abstract class Fighter : Entity
 
             Frames.Add(States.Forward, frames);
         }
-        protected virtual void setBackwardFrames()
+        private void setBackwardFrames()
         {
             List<Frame> frames = new List<Frame>();
             int row = 2;
@@ -502,7 +508,7 @@ public abstract class Fighter : Entity
                 frames
             );
         }
-        protected virtual void setIdleFrames()
+        private void setIdleFrames()
         {
             List<Frame> frames = new List<Frame>();
             int row = 0;
@@ -523,7 +529,7 @@ public abstract class Fighter : Entity
                 frames
             );
         }
-        protected virtual void setJumpingFrames()
+        private void setJumpingFrames()
         {
             List<Frame> frames = new List<Frame>();
             int row = 4;
@@ -544,7 +550,7 @@ public abstract class Fighter : Entity
             setJumpingBFrames();   
             setJumpingFFrames();   
         }
-        protected virtual void setJumpingFFrames()
+        private void setJumpingFFrames()
         {
             List<Frame> frames = new List<Frame>();
             int row = 4;
@@ -565,7 +571,7 @@ public abstract class Fighter : Entity
                 frames
             );
         }
-        protected virtual void setJumpingBFrames()
+        private void setJumpingBFrames()
         {
             List<Frame> frames = new List<Frame>();
             int row = 4;
@@ -586,7 +592,7 @@ public abstract class Fighter : Entity
                 frames
             );
         }
-        protected virtual void setCrouchFrames()
+        private void setCrouchFrames()
         {
 
             List<Frame> frames = new List<Frame>();
@@ -606,7 +612,7 @@ public abstract class Fighter : Entity
             setCrouchDownFrames();
             setCrouchUpFrames();
         }
-        protected virtual void setLightPunchFrames()
+        private void setLightPunchFrames()
         {
             List<Frame> frames = new();
             int row = 3 ;
@@ -626,7 +632,7 @@ public abstract class Fighter : Entity
                 frames
             );
         }    
-        protected virtual void setMediumPunchFrames()
+        private void setMediumPunchFrames()
         {
             List<Frame> frames = new();
             int row = 3 ;
@@ -646,7 +652,7 @@ public abstract class Fighter : Entity
                 frames
             );
         }    
-        protected virtual void setCrouchUpFrames()
+        private void setCrouchUpFrames()
         {
             List<Frame> frames = new List<Frame>();
             int row = 6;
@@ -667,7 +673,7 @@ public abstract class Fighter : Entity
                 frames
             );
         }
-        protected virtual void setCrouchDownFrames()
+        private void setCrouchDownFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 6;

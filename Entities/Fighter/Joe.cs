@@ -2,18 +2,23 @@ using static Stage;
 
 public class Joe : Fighter
 {
-    public Joe()
+    public Joe(PointF initialPosition) : base(initialPosition)
     {
         this.Image =  new Bitmap("./Assets/Sprites/Joe.png");
-        this.Position = new Point(800, 1080 - STAGE_FLOOR);
-        this.Size = new Size(200, 236);
-        this.AnimationTimer = 1;
-        Direction = FighterDirection.LEFT;
-            
+    }
+    protected override void setFrames()
+    {
+        setIdleFrames();
+        setForwardFrames();
+        setBackwardFrames();
+        setJumpingFrames();
+        setCrouchFrames();
+        setLightPunchFrames();
+        setMediumPunchFrames();
     }
 
     #region Override SetFrames
-    protected override void setForwardFrames()
+    private void setForwardFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 1;
@@ -31,7 +36,7 @@ public class Joe : Fighter
 
         Frames.Add(States.Forward, frames);
     }
-    protected override void setBackwardFrames()
+    private void setBackwardFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 2;
@@ -52,7 +57,7 @@ public class Joe : Fighter
             frames
         );
     }
-    protected override void setIdleFrames()
+    private void setIdleFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 0;
@@ -73,7 +78,7 @@ public class Joe : Fighter
             frames
         );
     }
-    protected override void setJumpingFrames()
+    private void setJumpingFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 4;
@@ -94,7 +99,7 @@ public class Joe : Fighter
         setJumpingBFrames();   
         setJumpingFFrames();   
     }
-    protected override void setJumpingFFrames()
+    private void setJumpingFFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 4;
@@ -115,7 +120,7 @@ public class Joe : Fighter
             frames
         );
     }
-    protected override void setJumpingBFrames()
+    private void setJumpingBFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 4;
@@ -136,7 +141,7 @@ public class Joe : Fighter
             frames
         );
     }
-    protected override void setCrouchFrames()
+    private void setCrouchFrames()
     {
 
         List<Frame> frames = new List<Frame>();
@@ -156,7 +161,7 @@ public class Joe : Fighter
         setCrouchDownFrames();
         setCrouchUpFrames();
     }
-    protected override void setLightPunchFrames()
+    private void setLightPunchFrames()
     {
         List<Frame> frames = new();
         int row = 3 ;
@@ -176,7 +181,7 @@ public class Joe : Fighter
             frames
         );
     }    
-    protected override void setMediumPunchFrames()
+    private void setMediumPunchFrames()
     {
         List<Frame> frames = new();
         int row = 3 ;
@@ -196,7 +201,7 @@ public class Joe : Fighter
             frames
         );
     }    
-    protected override void setCrouchUpFrames()
+    private void setCrouchUpFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 6;
@@ -217,7 +222,7 @@ public class Joe : Fighter
             frames
         );
     }
-    protected override void setCrouchDownFrames()
+    private void setCrouchDownFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 6;
