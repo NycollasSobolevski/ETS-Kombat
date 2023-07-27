@@ -46,10 +46,8 @@ public static class Control
                 { Keys.NumPad4, false},
                 { Keys.NumPad5, false},
                 { Keys.NumPad6, false},
-
-                { Keys.Q, false},
-                { Keys.E, false},
                 
+                //? Assistence keys
                 { Keys.OemMinus, false},
             };
     }
@@ -70,32 +68,33 @@ public static class Control
         };
     }
 
-    public static States GetState(Entity entity)
+    public static States GetState(Player player, Fighter f)
     {
-        if (entity is Ruyviu)
-            return GetRuyviuState(entity as Ruyviu);
-        else if (entity is Joe)
-            return GetJoeState(entity as Joe);
+        if (player is Player1)
+            return GetP1State(f);
+        else if (player is Player2)
+            return GetP2State(f);
         else
             return States.Idle;
     }
 
     private static bool isCrouchingP1;
     private static bool isCrouchingP2;
-    private static States GetRuyviuState(Ruyviu r)
+    private static States GetP1State(Fighter fighter)
     {
         States state = States.Idle;
 
         if (KeyMapping.Map[Keys.A])
-            if (r.Direction == FighterDirection.LEFT)
+            if (fighter.Direction == FighterDirection.LEFT)
                 state = States.Forward;
             else
                 state = States.Backward;
         if (KeyMapping.Map[Keys.D])
-            if (r.Direction == FighterDirection.LEFT)
+            if (fighter.Direction == FighterDirection.LEFT)
                 state = States.Backward;
             else
                 state = States.Forward;
+    
         if (KeyMapping.Map[Keys.W])
             state = States.Jump;
 
@@ -124,23 +123,31 @@ public static class Control
             state = States.HeavyPunch;
 
         if (KeyMapping.Map[Keys.D] && KeyMapping.Map[Keys.W])
-            state = States.JumpForward;
+            if (fighter.Direction == FighterDirection.RIGHT)
+                state = States.JumpForward;
+            else
+                state = States.JumpBackward;
+
         if (KeyMapping.Map[Keys.A] && KeyMapping.Map[Keys.W])
-            state = States.JumpBackward;
+            if (fighter.Direction == FighterDirection.RIGHT)
+                state = States.JumpBackward;
+            else
+                state = States.JumpForward;
 
         return state;
     }
 
-    private static States GetJoeState(Joe j)
+    private static States GetP2State(Fighter fighter)
     {
         States state = States.Idle;
+        
         if (KeyMapping.Map[Keys.Left])
-            if (j.Direction == FighterDirection.LEFT)
+            if (fighter.Direction == FighterDirection.LEFT)
                 state = States.Forward;
             else
                 state = States.Backward;
         if (KeyMapping.Map[Keys.Right])
-            if (j.Direction == FighterDirection.LEFT)
+            if (fighter.Direction == FighterDirection.LEFT)
                 state = States.Backward;
             else
                 state = States.Forward;
@@ -171,6 +178,17 @@ public static class Control
             state = States.MediumPunch;
         if (KeyMapping.Map[Keys.NumPad6])
             state = States.HeavyPunch;
+        
+        if (KeyMapping.Map[Keys.Right] && KeyMapping.Map[Keys.Up])
+            if (fighter.Direction == FighterDirection.RIGHT)
+                state = States.JumpForward;
+            else
+                state = States.JumpBackward;
+        if (KeyMapping.Map[Keys.Left] && KeyMapping.Map[Keys.Up])
+            if (fighter.Direction == FighterDirection.RIGHT)
+                state = States.JumpBackward;
+            else
+                state = States.JumpForward;
 
         return state;
     }

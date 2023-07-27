@@ -24,19 +24,22 @@ public class FightForm
         all_entities.Add(fps);
         fps.Ticks = ticks;
 
-        Ruyviu k = new Ruyviu();
-        // Joe k = new Joe();
-        all_entities.Add(k);
+        Ruyviu figther1 = new Ruyviu(new PointF(400, 1000));
+        all_entities.Add(figther1);
 
-        Joe j = new Joe();
-        all_entities.Add(j);
+        Ruyviu fighter2 = new Ruyviu(new PointF(800, 1000));
+        all_entities.Add(fighter2);
 
-        k.Enemy = j;
-        j.Enemy = k;
+        figther1.Enemy = fighter2;
+        fighter2.Enemy = figther1;
         
         System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer() {
             Interval = ticks
         };
+
+        Player1 p1 = new Player1(figther1, "falas");
+        Player2 p2 = new Player2(fighter2, "falas");
+
 
         Control.GetInstance(form);
         
@@ -49,12 +52,12 @@ public class FightForm
             foreach (var item in all_entities)
                 item.Draw(g);
             
-            k.ChangeState(
-                Control.GetState(k)
+            figther1.ChangeState(
+                Control.GetState(p1, p1.Fighter)
             );
             
-            j.ChangeState(
-                Control.GetState(j)
+            fighter2.ChangeState(
+                Control.GetState(p2, p2.Fighter)
             );
 
             pb.Refresh();
@@ -66,15 +69,13 @@ public class FightForm
             bmp = new Bitmap(pb.Width, pb.Height);
             g = Graphics.FromImage(bmp);
 
-            k.ScreenSize = new Size(bmp.Width, bmp.Height);
-            j.ScreenSize = k.ScreenSize;
+            figther1.ScreenSize = new Size(bmp.Width, bmp.Height);
+            fighter2.ScreenSize = figther1.ScreenSize;
             
             pb.Image = bmp;
         };
 
 
-        Player p1 = Player1.BuildPlayer(k);
-        Player p2 = Player2.BuildPlayer(j);
     }
 
     public void Run()

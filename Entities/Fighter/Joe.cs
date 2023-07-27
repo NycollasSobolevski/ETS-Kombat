@@ -4,8 +4,7 @@ public class Joe : Fighter
 {
     public Joe()
     {
-        this.Image =  new Bitmap("./Assets/Sprites/Joe.png");            //! DOTNET RUN
-        // this.Image =  new Bitmap("../../../Assets/Sprites/Joe.png");        //! DEBUG
+        this.Image =  new Bitmap("./Assets/Sprites/Joe.png");
         this.Position = new Point(800, 1080 - STAGE_FLOOR);
         this.Size = new Size(200, 236);
         this.AnimationTimer = 1;
@@ -13,29 +12,7 @@ public class Joe : Fighter
             
     }
 
-    public override void Update(Graphics g, DateTime t)
-    {
-        Move(t);
-
-        Frame.HurtBox = new RectangleF(
-            this.Rectangle.X,
-            this.Rectangle.Y,
-            Frame.HurtBox.Width,
-            Frame.HurtBox.Height   
-        );
-
-        Frame.HitBox = new RectangleF(
-            this.Rectangle.X + Frame.HitBoxInit.X,
-            this.Rectangle.Y + Frame.HitBoxInit.Y,
-            Frame.HitBoxInit.Width,
-            Frame.HitBoxInit.Height   
-        );
-
-        this.UpdateAnimation(t);
-        this.UpdateStageConstraints();
-    }
-
-    #region 
+    #region Override SetFrames
     protected override void setForwardFrames()
     {
         List<Frame> frames = new List<Frame>();
@@ -54,7 +31,7 @@ public class Joe : Fighter
 
         Frames.Add(States.Forward, frames);
     }
-protected override    void setBackwardFrames()
+    protected override void setBackwardFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 2;
@@ -75,7 +52,7 @@ protected override    void setBackwardFrames()
             frames
         );
     }
-protected override    void setIdleFrames()
+    protected override void setIdleFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 0;
@@ -96,7 +73,7 @@ protected override    void setIdleFrames()
             frames
         );
     }
-protected override    void setJumpingFrames()
+    protected override void setJumpingFrames()
     {
         List<Frame> frames = new List<Frame>();
         int row = 4;
@@ -159,7 +136,7 @@ protected override    void setJumpingFrames()
             frames
         );
     }
-protected override    void setCrouchFrames()
+    protected override void setCrouchFrames()
     {
 
         List<Frame> frames = new List<Frame>();
@@ -179,7 +156,7 @@ protected override    void setCrouchFrames()
         setCrouchDownFrames();
         setCrouchUpFrames();
     }
-protected override    void setLightPunchFrames()
+    protected override void setLightPunchFrames()
     {
         List<Frame> frames = new();
         int row = 3 ;
@@ -199,7 +176,7 @@ protected override    void setLightPunchFrames()
             frames
         );
     }    
-protected override    void setMediumPunchFrames()
+    protected override void setMediumPunchFrames()
     {
         List<Frame> frames = new();
         int row = 3 ;
@@ -261,6 +238,5 @@ protected override    void setMediumPunchFrames()
             frames
         );
     }
-    
     #endregion 
 }

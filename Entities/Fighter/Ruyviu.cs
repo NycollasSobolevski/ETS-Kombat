@@ -2,45 +2,16 @@ using static Stage;
 
 public class Ruyviu : Fighter
 {
-    public Ruyviu()
+    public Ruyviu(PointF initialPosition)
     {
         this.Image =  new Bitmap("./Assets/Sprites/Ruyviu.png");
-        this.Position = new Point(500, 1080 - STAGE_FLOOR);
+        this.Position = new PointF(initialPosition.X, initialPosition.Y - STAGE_FLOOR);
         this.Size = new Size(200, 236);
         this.AnimationTimer = 1;
         Direction = FighterDirection.RIGHT;
     }
 
-    // public override void Draw(Graphics g)
-    // {
-    //     var container = g.BeginContainer();
-
-    //     ChangeState(CurrentState);
-    //     this.ChangeSpriteDirectionX(g);
-
-    //     g.DrawImage(
-    //         this.Image,
-    //         this.Rectangle,
-    //         new Rectangle(Frame.PointInSpriteSheet.X, Frame.PointInSpriteSheet.Y, Frame.Size.Width, Frame.Size.Height),
-    //         GraphicsUnit.Pixel
-    //     );
-
-    //     g.EndContainer(container);
-    //     this.DrawDebug(g);
-    // }
-    public override void Update(Graphics g, DateTime t)
-    {
-        var container = g.BeginContainer();
-        Move(t);
-        this.UpdateAnimation(t);
-        this.UpdateStageConstraints();
-
-        this.StateObjects[CurrentState].Update(t);
-
-        g.EndContainer(container);
-    }
-
-    //! ANIMATION FRAMES AND SPRITES
+    #region Override SetFrames
     protected override void setForwardFrames()
     {
         List<Frame> frames = new List<Frame>();
@@ -238,4 +209,6 @@ public class Ruyviu : Fighter
             frames
         );
     }
+
+    #endregion
 }

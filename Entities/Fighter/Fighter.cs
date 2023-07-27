@@ -4,7 +4,6 @@
 public abstract class Fighter : Entity
 {   
     # region BasicProps
-    public abstract void Update(Graphics g, DateTime t);
 
     // protected static Dictionary<States, States[]> validStates = new Dictionary<States, States[]>() {
     //     {States.Backward, new States[] {States.Backward, States.Idle}},
@@ -50,7 +49,7 @@ public abstract class Fighter : Entity
     protected bool isCrouching = false;
     public Fighter Enemy { get; set; }
     public Dictionary<States, FighterStateObject> StateObjects;
-    public bool Debug { get; set; }
+    public bool Debug { get; set; } = true;
     #endregion
     public Fighter()
     {
@@ -201,13 +200,24 @@ public abstract class Fighter : Entity
                     )
                 );
         g.DrawString(
-            $"Velocity: X {this.Velocity.X} | Y {this.Velocity.Y}" +
-            $"Position: X {this.Position.X}| Y {this.Position.Y}" +
+            $"Velocity: X {this.Velocity.X} | Y {this.Velocity.Y}\n" +
+            $"Position: X {this.Position.X}| Y {this.Position.Y}\n" +
             $"State: {this.CurrentState}",
             new Font("arial", 10),
             Brushes.Black,
             new PointF(this.Direction == FighterDirection.LEFT ? 0 : ScreenSize.Width - 300, 0)
         );        
+    }
+    public virtual void Update(Graphics g, DateTime t)
+    {
+        var container = g.BeginContainer();
+        Move(t);
+        this.UpdateAnimation(t);
+        this.UpdateStageConstraints();
+
+        this.StateObjects[CurrentState].Update(t);
+
+        g.EndContainer(container);
     }
     
     # region SpriteDirection
@@ -238,7 +248,6 @@ public abstract class Fighter : Entity
                 (float)(this.Position.Y + Velocity.Y * calc)
             );
         }
-
         public void ChangeState(States newState)
         {
             if (StateObjects[newState].ValidFrom.Contains(this.CurrentState))
@@ -263,11 +272,19 @@ public abstract class Fighter : Entity
         }
         public void ChangeSpriteDirectionX(Graphics g)
         {
-            getDirection();
             int directionValue = (int)(Direction);
             if (directionValue == -1)
                 g.TranslateTransform((this.Position.X + 2 * Frame.Size.Width) * 2, 0);
             g.ScaleTransform(directionValue, 1);
+            
+            if (
+                this.CurrentState == States.Jump ||
+                this.CurrentState == States.JumpForward ||
+                this.CurrentState == States.JumpBackward
+            )
+                return;
+            
+            getDirection();
         }
         public void getDirection()
         => this.Direction = this.Position.X > Enemy.Position.X?
@@ -704,6 +721,7 @@ public abstract class Fighter : Entity
                     new RectangleF(0, 0, (68 * 2), (103 * 2)),
                     new RectangleF(0, 0, (68 * 2), (103 * 2)),
                     new RectangleF(0, 0, (68 * 2), (103 * 2)),
+                    new RectangleF(0, 0, (68 * 2), (103 * 2)),
                 };
 
                 for (int i = 0; i < Frames[States.Idle].Count; i++)
@@ -716,6 +734,7 @@ public abstract class Fighter : Entity
                     new RectangleF(0, 0, (66 * 2), (105 * 2)),
                     new RectangleF(0, 0, (80 * 2), (118 * 2)),
                     new RectangleF(0, 0, (100 * 2), (105 * 2)),
+                    new RectangleF(0, 0, (66 * 2), (105 * 2)),
                     new RectangleF(0, 0, (66 * 2), (105 * 2)),
                 };
 
@@ -741,6 +760,7 @@ public abstract class Fighter : Entity
                     new RectangleF(0, 0, 63*2, 104*2),
                     new RectangleF(0, 0, 60*2, 81*2),
                     new RectangleF(0, 0, 63*2, 104*2),
+                    new RectangleF(0, 0, 75*2, 118*2),
                     new RectangleF(0, 0, 75*2, 118*2),
                 };
 
