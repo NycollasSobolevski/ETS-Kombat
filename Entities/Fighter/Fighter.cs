@@ -254,12 +254,7 @@ public abstract class Fighter : Entity
         this.UpdateStageConstraints();
 
         this.StateObjects[CurrentState].Update(t);
-        Frame.PushBox = new RectangleF(
-            Frame.PushBox.X + this.Size.Width,
-            Frame.PushBox.Y - this.Size.Height,
-            Frame.PushBox.Width,
-            Frame.PushBox.Height
-        );
+        
 
         g.EndContainer(container);
     }
@@ -835,7 +830,12 @@ public abstract class Fighter : Entity
                 {
                     foreach (var frame in Frames[state])
                     {
-                        frame.PushBox = new RectangleF(32, 32, 200 * 0.7f, 204);
+                        frame.PushBox = new RectangleF(
+                            this.Rectangle.X,
+                            this.Rectangle.Y,
+                            200 * 0.7f,
+                            204
+                        );
                     }
                 }catch (Exception ex){
                     continue;
