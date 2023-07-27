@@ -52,11 +52,13 @@ public abstract class Fighter : Entity
     public Dictionary<States, FighterStateObject> StateObjects;
     public bool Debug { get; set; } = true;
     public string Name { get; set; }
+    public Life HealthPoints { get; set; }
+    private int hp = 1000;
     #endregion
-    public Fighter(PointF initialPosition)
+    public Fighter(PointF initialPosition, int health)
     {
+        hp = health;
         SetData();
-        
         this.AnimationTimer = 1;
         this.Size = new Size(200, 236);
         this.Position = new PointF(initialPosition.X, initialPosition.Y - STAGE_FLOOR);
@@ -129,6 +131,34 @@ public abstract class Fighter : Entity
                     States.CrouchDown
                 })
             },
+            {
+                States.LightKick,
+                new FighterStateObject(initLightKick, handleLightKick,
+                new List<States>(){
+                    States.Idle, States.Crouch, States.JumpForward, States.JumpForward
+                })
+            },
+            {
+                States.LightPunch,
+                new FighterStateObject(initLightKick, handleLightKick,
+                new List<States>(){
+                    States.Idle, States.Crouch, States.JumpForward, States.JumpForward
+                })
+            },
+            {
+                States.MediumKick,
+                new FighterStateObject(initMediumKick, handleMediumKick,
+                new List<States>(){
+                    States.Idle, States.Crouch, States.JumpForward, States.JumpForward
+                })
+            },
+            {
+                States.MediumPunch,
+                new FighterStateObject(initMediumPunch, handleMediumPunch,
+                new List<States>(){
+                    States.Idle, States.Crouch, States.JumpForward, States.JumpForward
+                })
+            },
 
         };
     }
@@ -146,6 +176,8 @@ public abstract class Fighter : Entity
             GraphicsUnit.Pixel
         );
         g.EndContainer(container);
+
+        this.HealthPoints.Draw(g, hp);
         
         if (Debug)
             this.DrawDebug(g);
@@ -222,6 +254,12 @@ public abstract class Fighter : Entity
         this.UpdateStageConstraints();
 
         this.StateObjects[CurrentState].Update(t);
+        Frame.PushBox = new RectangleF(
+            Frame.PushBox.X + this.Size.Width,
+            Frame.PushBox.Y - this.Size.Height,
+            Frame.PushBox.Width,
+            Frame.PushBox.Height
+        );
 
         g.EndContainer(container);
     }

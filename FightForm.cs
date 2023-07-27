@@ -24,10 +24,10 @@ public class FightForm
         all_entities.Add(fps);
         fps.Ticks = ticks;
 
-        Ruyviu figther1 = new Ruyviu(new PointF(400, 1000));
+        Ruyviu figther1 = new Ruyviu(new PointF(400, 1000), 1000);
         all_entities.Add(figther1);
 
-        Ruyviu fighter2 = new Ruyviu(new PointF(800, 1000));
+        Ruyviu fighter2 = new Ruyviu(new PointF(800, 1000), 1000);
         all_entities.Add(fighter2);
 
         figther1.Enemy = fighter2;
@@ -71,6 +71,9 @@ public class FightForm
 
             figther1.ScreenSize = new Size(bmp.Width, bmp.Height);
             fighter2.ScreenSize = figther1.ScreenSize;
+
+            figther1.HealthPoints = new Life(figther1.ScreenSize, 1);
+            fighter2.HealthPoints = new Life(figther1.ScreenSize, 0);
             
             pb.Image = bmp;
         };
