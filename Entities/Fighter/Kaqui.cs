@@ -259,58 +259,58 @@ public class Kaqui : Fighter
         for (int i = 0; i < Frames[States.Idle].Count; i++)
             Frames[States.Idle][i].HurtBox = 
                 new RectangleF( 
-                    this.Position.X + this.Size.Width - 50,
-                    this.Position.Y - this.Size.Height,
+                    this.Size.Width - 50,
+                    - this.Size.Height,
                     100, 215 );
         for (int i = 0; i < Frames[States.Forward].Count; i++)
             Frames[States.Forward][i].HurtBox = 
                 new RectangleF( 
-                    this.Position.X + this.Size.Width - 50,
-                    this.Position.Y - this.Size.Height,
+                    this.Size.Width - 50,
+                    - this.Size.Height,
                     100, 215 );
         for (int i = 0; i < Frames[States.Backward].Count; i++)
             Frames[States.Backward][i].HurtBox = 
                 new RectangleF( 
-                    this.Position.X + this.Size.Width - 50,
-                    this.Position.Y - this.Size.Height,
+                    this.Size.Width - 50,
+                    - this.Size.Height,
                     100, 215 );
         for (int i = 0; i < Frames[States.CrouchDown].Count; i++)
         {
             Frames[States.CrouchDown][i].HurtBox = 
                 new RectangleF( 
-                    this.Position.X + this.Size.Width - 50,
-                    this.Position.Y - this.Size.Height,
+                    this.Size.Width - 50,
+                    - this.Size.Height,
                     100, 135 );
             Frames[States.CrouchUp][(Frames[States.CrouchUp].Count - 1) - i]
                 .HurtBox = 
                     new RectangleF( 
-                        this.Position.X + this.Size.Width - 50,
-                        this.Position.Y - this.Size.Height,
+                        0 + this.Size.Width - 50,
+                        0 - this.Size.Height,
                         100, 135 );
         }
         Frames[States.Crouch][0].HurtBox = 
             new RectangleF( 
-                this.Position.X + this.Size.Width - 50,
-                this.Position.Y - this.Size.Height,
+                0 + this.Size.Width - 50,
+                0 - this.Size.Height,
                 100, 135 );
 
         for (int i = 0; i < Frames[States.Jump].Count; i++)
             Frames[States.Jump][i].HurtBox = 
                 new RectangleF( 
-                    this.Position.X + this.Size.Width - 50,
-                    this.Position.Y - this.Size.Height,
+                     this.Size.Width - 50,
+                    - this.Size.Height,
                     100, 135 );
         for (int i = 0; i < Frames[States.JumpForward].Count; i++)
             Frames[States.JumpForward][i].HurtBox = 
                 new RectangleF( 
-                    this.Position.X + this.Size.Width - 50,
-                    this.Position.Y - this.Size.Height,
+                     this.Size.Width - 50,
+                    - this.Size.Height,
                     100, 135 );
         for (int i = 0; i < Frames[States.JumpBackward].Count; i++)
             Frames[States.JumpBackward][i].HurtBox = 
                 new RectangleF( 
-                    this.Position.X + this.Size.Width - 50,
-                    this.Position.Y - this.Size.Height,
+                     this.Size.Width - 50,
+                    - this.Size.Height,
                     100, 135 );
         
         #endregion
@@ -336,7 +336,7 @@ public class Kaqui : Fighter
         g.DrawImage(
             this.Image,
             new RectangleF(
-                this.Position.X + this.Size.Width - 50,
+                this.Position.X + this.Size.Width - Frame.OriginPoint.X,
                 this.Position.Y - this.Size.Height,
                 this.Rectangle.Width,
                 this.Rectangle.Height
@@ -355,17 +355,14 @@ public class Kaqui : Fighter
             new PointF(40,40)
         );
 
-        // g.DrawImage(this.Image, new RectangleF(
-        //     this.Position.X + this.Size.Width - 50,
-        //     this.Position.Y - this.Size.Height,
-        //     this.Frame.Size.Width, this.Frame.Size.Height
-        // ), this.Frame.ToRectangle(), GraphicsUnit.Pixel);
+        g.DrawImage(this.Image, new RectangleF(
+            this.Position.X + this.Size.Width - 50,
+            this.Position.Y - this.Size.Height,
+            this.Frame.Size.Width, this.Frame.Size.Height
+        ), this.Frame.ToRectangle(), GraphicsUnit.Pixel);
     }
-
-
     public override void Update(Graphics g, DateTime t)
     {
         base.Update(g, t);
-        this.setHurtboxes();
     }
 }

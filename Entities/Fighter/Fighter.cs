@@ -164,13 +164,13 @@ public abstract class Fighter : Entity
     }
     public void Draw(Graphics g)
     {
+        if (Debug)
+            this.DrawDebug(g);
+
         var container = g.BeginContainer();
         
         this.ChangeSpriteDirectionX(g);
         ChangeState(CurrentState);
-        
-        if (Debug)
-            this.DrawDebug(g);
         
         DrawFighter(g);
 
@@ -258,7 +258,7 @@ public abstract class Fighter : Entity
             $"State: {this.CurrentState}",
             new Font("arial", 10),
             Brushes.Black,
-            new PointF(this.Direction == FighterDirection.LEFT ? 0 : ScreenSize.Width - 300, 0)
+            new PointF(this.Direction == FighterDirection.RIGHT ? 0 : ScreenSize.Width - 300, 0)
         );        
     }
     public virtual void Update(Graphics g, DateTime t)
@@ -267,12 +267,23 @@ public abstract class Fighter : Entity
         Move(t);
         this.UpdateAnimation(t);
         this.UpdateStageConstraints();
+        this.UpdateCollision();
 
         this.StateObjects[CurrentState].Update(t);
         
 
         g.EndContainer(container);
     }
+    protected virtual void UpdateCollision()
+    {
+        this.Frame.HurtBox = new RectangleF(
+            Rectangle.X + Frame.OriginPoint.X / 2,
+            Rectangle.Y + Frame.OriginPoint.Y - Frame.HurtBox.Height,
+            this.Frame.HurtBox.Width,
+            this.Frame.HurtBox.Height
+        );
+    }
+    
     
     # region SpriteDirection
         public void UpdateStageConstraints()

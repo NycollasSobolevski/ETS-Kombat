@@ -6,6 +6,7 @@ public class Life
 
     private PointF position;
     private Size size;
+    private bool debug = true;
 
     public Life(Size screenSize, int player)
     {
@@ -21,6 +22,34 @@ public class Life
     }
     public void Draw(Graphics g, int health)
     {
+        if (debug)
+        {
+            if (Player == 1)
+            g.DrawString(
+                $"Life: {health}",
+                new Font("Arial", 12),
+                Brushes.Black,
+                new PointF(
+                    size.Width / 2 - 100,
+                    size.Height
+                )
+            );
+
+            else
+            g.DrawString(
+                $"Life: {health}",
+                new Font("Arial", 12),
+                Brushes.Black,
+                new PointF(
+                    size.Width / 2 - 100,
+                    size.Height
+                )
+            );
+
+            return;
+        }
+
+
         g.DrawRectangle(
             Pens.Black,
             new RectangleF(
@@ -29,6 +58,7 @@ public class Life
                 size.Height
             )
         );
+        
         if (Player == 1)
             g.FillRectangle(
                 Brushes.DarkBlue,
