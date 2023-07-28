@@ -41,7 +41,7 @@ public class Life
                 new Font("Arial", 12),
                 Brushes.Black,
                 new PointF(
-                    size.Width / 2 - 100,
+                    size.Width / 2 + 100,
                     size.Height
                 )
             );

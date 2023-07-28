@@ -158,17 +158,17 @@ public class Kaqui : Fighter
         frames.Add(new Frame(
             new Point(0, 0 + (row  * 230)),
             new Size(130, 230),
-            new Point(0,0)
+            new Point(55, Size.Height * 2)
         ));
         frames.Add(new Frame(
             new Point(0 + (130), 0 + (row  * 230)),
             new Size(120, 230),
-            new Point(0,0)
+            new Point(30, Size.Height * 2)
         ));
         frames.Add(new Frame(
             new Point(0 + (250), 0 + (row  * 230)),
             new Size(120, 230),
-            new Point(0,0)
+            new Point(50, Size.Height * 2)
         ));
 
         this.Frames.Add(States.LightPunch, frames);
@@ -199,18 +199,18 @@ public class Kaqui : Fighter
             frames.Add(new Frame(
                 new Point(0 + (110 * i), 0 + (row  * 230)),
                 new Size(110, 230),
-                new Point(0,0)
+                new Point(33, Size.Height * 2)
             ));
         }
         frames.Add(new Frame(
             new Point((110 * 2), 0 + (row  * 230)),
             new Size(220, 230),
-            new Point(0,0)
+            new Point(283 - 220, Size.Height * 2)
         ));
         frames.Add(new Frame(
             new Point((110 * 4), 0 + (row  * 230)),
             new Size(110, 230),
-            new Point(0,0)
+            new Point(0, 0)
         ));
         this.Frames.Add(States.LightKick, frames);
     }
@@ -230,23 +230,29 @@ public class Kaqui : Fighter
         frames.Add(new Frame(
             new Point((110 * 3), 0 + (row  * 230)),
             new Size(170, 230),
-            new Point(0,0)
+            new Point(397 - 330, Size.Height * 2)
+        ));
+        frames.Add(new Frame(
+            new Point((110 * 3), 0 + (row  * 230)),
+            new Size(170, 230),
+            new Point(397 - 330, Size.Height * 2)
         ));
         frames.Add(new Frame(
             new Point(500, 0 + (row  * 230)),
             new Size(110, 230),
-            new Point(0,0)
+            new Point(540 - 500, Size.Height * 2)
         ));
         frames.Add(new Frame(
             new Point(620, 0 + (row  * 230)),
             new Size(110, 230),
-            new Point(0,0)
+            new Point(50,  Size.Height * 2)
         ));
-        frames.Add(new Frame(
-            new Point(740, 0 + (row  * 230)),
-            new Size(110, 230),
-            new Point(0,0)
-        ));
+        // frames.Add(new Frame(
+        //     new Point(740, 0 + (row  * 230)),
+        //     new Size(70, Size.Height * 2),
+        //     new Point(20, Size.Height * 2)
+        // ));
+        
         this.Frames.Add(States.MediumKick, frames);
     }
     #endregion
@@ -317,15 +323,19 @@ public class Kaqui : Fighter
         // #region hits Hurtboxes
 
     }
-
     protected override void setHitboxes()
     {
-        Frames[States.LightPunch][2].HitBox = 
-            new RectangleF( 0, 0, 50, 50);
+        Frames[States.LightPunch][1].HitBox = 
+            new RectangleF( 50, 30, 60, 20);
+
         Frames[States.MediumPunch][2].HitBox = 
-            new RectangleF( 0, 0, 50, 50);
+            new RectangleF( 70, 20, 30, 50);
+        Frames[States.MediumPunch][3].HitBox = 
+            new RectangleF( 90, 20, 30, 50);
+
         Frames[States.LightKick][2].HitBox =
-            new RectangleF( 0, 0, 50, 50);
+            new RectangleF( 90, 75, 95, 55);
+
         Frames[States.MediumKick][2].HitBox =
             new RectangleF( 0, 0, 50, 50);
     }
@@ -333,36 +343,18 @@ public class Kaqui : Fighter
     #endregion
     public override void DrawFighter(Graphics g)
     {
-        g.DrawImage(
-            this.Image,
-            new RectangleF(
-                this.Position.X + this.Size.Width - Frame.OriginPoint.X,
-                this.Position.Y - this.Size.Height,
-                this.Rectangle.Width,
-                this.Rectangle.Height
-            ),
-            Frame.ToRectangle(),
-            GraphicsUnit.Pixel
-        );
-    }
-    public override void DrawDebug(Graphics g)
-    {
-        base.DrawDebug(g);
-        g.DrawString(
-            $"Kaqui: \n{this.Position} - {this.Frame.HurtBox}",
-            new Font("Arial",12),
-            Brushes.Red,
-            new PointF(40,40)
-        );
-
         g.DrawImage(this.Image, new RectangleF(
             this.Position.X + this.Size.Width - 50,
             this.Position.Y - this.Size.Height,
             this.Frame.Size.Width, this.Frame.Size.Height
         ), this.Frame.ToRectangle(), GraphicsUnit.Pixel);
     }
-    public override void Update(Graphics g, DateTime t)
+
+    public override void DrawDebug(Graphics g)
     {
-        base.Update(g, t);
+        base.DrawDebug(g);
+
+        if (this.Frame.HitBox.X != 0 && this.Frame.HitBox.Y != 0)
+            g.DrawRectangle(new Pen(Color.Red), this.Frame.HitBox.X, this.Frame.HitBox.Y, this.Frame.HitBox.Width, this.Frame.HitBox.Height);
     }
 }

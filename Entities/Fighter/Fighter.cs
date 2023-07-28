@@ -6,22 +6,7 @@ public abstract class Fighter : Entity
 {   
     # region BasicProps
 
-    // protected static Dictionary<States, States[]> validStates = new Dictionary<States, States[]>() {
-    //     {States.Backward, new States[] {States.Backward, States.Idle}},
-    //     {States.Forward, new States[] {States.Forward, States.Idle}},
-        
-    //     {States.Jump, new States[] {States.Jump, States.Idle}},
-    //     {States.JumpForward, new States[] {States.JumpForward, States.Idle}},
-    //     {States.JumpBackward, new States[] {States.JumpBackward, States.Idle}},
-        
-    //     {States.CrouchDown, new States[] {States.CrouchDown, States.Idle}},
-    //     {States.Crouch, new States[] {States.CrouchDown}},
-    //     {States.CrouchUp, new States[] {States.Crouch}},
 
-    //     {States.LightKick, new States[] {States.LightKick, States.Idle, States.Crouch, States.LightPunch, States.HeavyKick}},
-
-    //     {States.Idle, new States[] {States.Idle, States.Backward, States.Forward, States.Crouch, States.Jump, States.LightKick, States.MediumKick, States.HeavyKick, States.LightPunch, States.MediumPunch, States.HeavyPunch}},
-    // };
     public Dictionary<States, List<Frame>> Frames { get; set; } = new Dictionary<States, List<Frame>>();
     public States CurrentState { get; set; }
     public VelocityClass Velocity { get; set; } = new VelocityClass(0 ,0);
@@ -53,11 +38,11 @@ public abstract class Fighter : Entity
     public bool Debug { get; set; } = true;
     public string Name { get; set; }
     public Life HealthPoints { get; set; }
-    private int hp = 1000;
+    public int Hp = 1000;
     #endregion
     public Fighter(PointF initialPosition, int health)
     {
-        hp = health;
+        Hp = health;
         SetData();
         this.AnimationTimer = 1;
         this.Size = new Size(200, 236);
@@ -140,7 +125,7 @@ public abstract class Fighter : Entity
             },
             {
                 States.LightPunch,
-                new FighterStateObject(initLightKick, handleLightKick,
+                new FighterStateObject(initLightPunch, handleLightPunch,
                 new List<States>(){
                     States.Idle, States.Crouch, States.JumpForward, States.JumpForward
                 })
@@ -176,9 +161,9 @@ public abstract class Fighter : Entity
 
         g.EndContainer(container);
 
-        this.HealthPoints.Draw(g, hp);
+        this.HealthPoints.Draw(g, Hp);
         
-        
+
     }
     public virtual void DrawFighter(Graphics g)
     {
@@ -282,6 +267,16 @@ public abstract class Fighter : Entity
             this.Frame.HurtBox.Width,
             this.Frame.HurtBox.Height
         );
+
+        // this.Frame.HitBox = new RectangleF(
+        //     Rectangle.X + Frame.OriginPoint.X + Frame.HitBox.X,
+        //     Rectangle.Y + Frame.OriginPoint.Y - Frame.HitBox.Y,
+        //     this.Frame.HitBox.Width,
+        //     this.Frame.HitBox.Height
+        // );
+
+        if (this.Frame.HitBox.IntersectsWith(Enemy.Frame.HurtBox))
+            Enemy.Hp -= 100;
     }
     
     

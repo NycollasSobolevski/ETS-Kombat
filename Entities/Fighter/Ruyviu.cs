@@ -230,16 +230,24 @@ public class Ruyviu : Fighter
     {
         List<Frame> frames = new();
         int row = 3 ;
+        int y = 179 + (118 * row);
+        int height = 118;
 
-        for (int i = 0; i < 2; i++)
-        {
-            Frame frame = new Frame(
-                new Point(360 + (120 * i), 179 + (118 * row)),
-                new Size(120, 118),
-                new Point(0, 0)
-            );
-            frames.Add(frame);
-        }
+        
+        Frame frame = new Frame(
+            new Point(360, y),
+            new Size(80, height),
+            new Point(30, Size.Height * 2)
+        );
+        frames.Add(frame);
+        
+        frame = new Frame(
+            new Point(453, y),
+            new Size(110, height),
+            new Point(34, Size.Height * 2)
+        );
+        frames.Add(frame);
+        
         
         Frames.Add(
             States.LightPunch,
