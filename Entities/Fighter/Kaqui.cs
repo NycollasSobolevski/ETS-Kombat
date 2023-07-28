@@ -251,7 +251,7 @@ public class Kaqui : Fighter
     }
     #endregion
 
-    #region Override SetHitboxes
+    #region Override Setboxes
     //TODO: ========================================================================================================================
     protected override void setHurtboxes()
     {
@@ -330,22 +330,42 @@ public class Kaqui : Fighter
             new RectangleF( 0, 0, 50, 50);
     }
 
+    #endregion
+    public override void DrawFighter(Graphics g)
+    {
+        g.DrawImage(
+            this.Image,
+            new RectangleF(
+                this.Position.X + this.Size.Width - 50,
+                this.Position.Y - this.Size.Height,
+                this.Rectangle.Width,
+                this.Rectangle.Height
+            ),
+            Frame.ToRectangle(),
+            GraphicsUnit.Pixel
+        );
+    }
     public override void DrawDebug(Graphics g)
     {
         base.DrawDebug(g);
         g.DrawString(
-            $"Kaqui: \n{this.Frame.HurtBox} - {this.Position} - {this.Frame.OriginPoint}",
+            $"Kaqui: \n{this.Position} - {this.Frame.HurtBox}",
             new Font("Arial",12),
             Brushes.Red,
             new PointF(40,40)
         );
+
+        // g.DrawImage(this.Image, new RectangleF(
+        //     this.Position.X + this.Size.Width - 50,
+        //     this.Position.Y - this.Size.Height,
+        //     this.Frame.Size.Width, this.Frame.Size.Height
+        // ), this.Frame.ToRectangle(), GraphicsUnit.Pixel);
     }
+
 
     public override void Update(Graphics g, DateTime t)
     {
         base.Update(g, t);
         this.setHurtboxes();
     }
-
-    #endregion
 }

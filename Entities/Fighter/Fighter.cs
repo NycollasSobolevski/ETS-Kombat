@@ -168,19 +168,26 @@ public abstract class Fighter : Entity
         
         this.ChangeSpriteDirectionX(g);
         ChangeState(CurrentState);
+        
+        if (Debug)
+            this.DrawDebug(g);
+        
+        DrawFighter(g);
 
+        g.EndContainer(container);
+
+        this.HealthPoints.Draw(g, hp);
+        
+        
+    }
+    public virtual void DrawFighter(Graphics g)
+    {
         g.DrawImage(
             this.Image,
             this.Rectangle,
             Frame.ToRectangle(),
             GraphicsUnit.Pixel
         );
-        g.EndContainer(container);
-
-        this.HealthPoints.Draw(g, hp);
-        
-        if (Debug)
-            this.DrawDebug(g);
     }
     public virtual void DrawDebug(Graphics g)
     {
@@ -193,7 +200,15 @@ public abstract class Fighter : Entity
                 5
             )
         );
-
+        g.FillRectangle(
+            Brushes.Aqua,
+            new RectangleF(
+                this.Position.X + this.Size.Width - 50,
+                this.Position.Y - this.Size.Height,
+                this.Rectangle.Width,
+                this.Rectangle.Height
+            )
+        );
         if (Frame.HitBox != null)
             g.DrawRectangle(
                 Pens.Red,
