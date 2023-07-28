@@ -16,6 +16,18 @@ public class Ruyviu : Fighter
         setMediumPunchFrames();
     }
 
+    
+    public override void DrawDebug(Graphics g)
+    {
+        base.DrawDebug(g);
+        g.DrawString(
+            $"Ruyviu: \n{this.Frame.HurtBox}\n{this.Position}",
+            new Font("Arial",12),
+            Brushes.Red,
+            new PointF(40,80)
+        );
+    }
+
     #region Override SetFrames
     private void setForwardFrames()
     {

@@ -25,7 +25,6 @@ public class Kaqui : Fighter
     private void setIdleFrames()
     {
         List<Frame> frames = new List<Frame>();
-        int row = 1;
         
         for (int i = 0; i < 4; i++)
         {
@@ -157,7 +156,7 @@ public class Kaqui : Fighter
         int row = 3;
         
         frames.Add(new Frame(
-            new Point(0 + (110), 0 + (row  * 230)),
+            new Point(0, 0 + (row  * 230)),
             new Size(130, 230),
             new Point(0,0)
         ));
@@ -254,17 +253,98 @@ public class Kaqui : Fighter
 
     #region Override SetHitboxes
     //TODO: ========================================================================================================================
-    protected override void setHitboxes()
+    protected override void setHurtboxes()
     {
+        #region position Hurtboxes
         for (int i = 0; i < Frames[States.Idle].Count; i++)
             Frames[States.Idle][i].HurtBox = 
-                new RectangleF( this.Position.X, this.Position.Y, 51, 117 );
+                new RectangleF( 
+                    this.Position.X + this.Size.Width - 50,
+                    this.Position.Y - this.Size.Height,
+                    100, 215 );
         for (int i = 0; i < Frames[States.Forward].Count; i++)
             Frames[States.Forward][i].HurtBox = 
-                new RectangleF( this.Position.X, this.Position.Y, 51, 117 );
+                new RectangleF( 
+                    this.Position.X + this.Size.Width - 50,
+                    this.Position.Y - this.Size.Height,
+                    100, 215 );
         for (int i = 0; i < Frames[States.Backward].Count; i++)
             Frames[States.Backward][i].HurtBox = 
-                new RectangleF( this.Position.X, this.Position.Y, 51, 117 );
+                new RectangleF( 
+                    this.Position.X + this.Size.Width - 50,
+                    this.Position.Y - this.Size.Height,
+                    100, 215 );
+        for (int i = 0; i < Frames[States.CrouchDown].Count; i++)
+        {
+            Frames[States.CrouchDown][i].HurtBox = 
+                new RectangleF( 
+                    this.Position.X + this.Size.Width - 50,
+                    this.Position.Y - this.Size.Height,
+                    100, 135 );
+            Frames[States.CrouchUp][(Frames[States.CrouchUp].Count - 1) - i]
+                .HurtBox = 
+                    new RectangleF( 
+                        this.Position.X + this.Size.Width - 50,
+                        this.Position.Y - this.Size.Height,
+                        100, 135 );
+        }
+        Frames[States.Crouch][0].HurtBox = 
+            new RectangleF( 
+                this.Position.X + this.Size.Width - 50,
+                this.Position.Y - this.Size.Height,
+                100, 135 );
+
+        for (int i = 0; i < Frames[States.Jump].Count; i++)
+            Frames[States.Jump][i].HurtBox = 
+                new RectangleF( 
+                    this.Position.X + this.Size.Width - 50,
+                    this.Position.Y - this.Size.Height,
+                    100, 135 );
+        for (int i = 0; i < Frames[States.JumpForward].Count; i++)
+            Frames[States.JumpForward][i].HurtBox = 
+                new RectangleF( 
+                    this.Position.X + this.Size.Width - 50,
+                    this.Position.Y - this.Size.Height,
+                    100, 135 );
+        for (int i = 0; i < Frames[States.JumpBackward].Count; i++)
+            Frames[States.JumpBackward][i].HurtBox = 
+                new RectangleF( 
+                    this.Position.X + this.Size.Width - 50,
+                    this.Position.Y - this.Size.Height,
+                    100, 135 );
+        
+        #endregion
+        // #region hits Hurtboxes
+
+    }
+
+    protected override void setHitboxes()
+    {
+        Frames[States.LightPunch][2].HitBox = 
+            new RectangleF( 0, 0, 50, 50);
+        Frames[States.MediumPunch][2].HitBox = 
+            new RectangleF( 0, 0, 50, 50);
+        Frames[States.LightKick][2].HitBox =
+            new RectangleF( 0, 0, 50, 50);
+        Frames[States.MediumKick][2].HitBox =
+            new RectangleF( 0, 0, 50, 50);
+    }
+
+    public override void DrawDebug(Graphics g)
+    {
+        base.DrawDebug(g);
+        g.DrawString(
+            $"Kaqui: \n{this.Frame.HurtBox} - {this.Position} - {this.Frame.OriginPoint}",
+            new Font("Arial",12),
+            Brushes.Red,
+            new PointF(40,40)
+        );
+    }
+
+    public override void Update(Graphics g, DateTime t)
+    {
+        base.Update(g, t);
+        this.setHurtboxes();
     }
 
     #endregion
