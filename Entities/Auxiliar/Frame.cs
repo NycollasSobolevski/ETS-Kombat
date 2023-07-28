@@ -6,6 +6,7 @@ public class Frame
     public Point OriginPoint { get; set; }
     public RectangleF PushBox { get; set; } 
     public RectangleF HitBox { get; set; }
+    public PointF HitboxPosition { get; set; }
     public RectangleF HitBoxInit { get; set; }
     public RectangleF ThrowBox { get; set; } 
     public RectangleF HurtBox { get; set; }
@@ -21,6 +22,7 @@ public class Frame
                 Size.Width,
                 Size.Height * 2
             );
+        
     }
     public Frame(Point pointInSpriteSheet, Size size, Point originPoint,
         RectangleF hurtbox, RectangleF hitbox, RectangleF pushbox, RectangleF throwbox)

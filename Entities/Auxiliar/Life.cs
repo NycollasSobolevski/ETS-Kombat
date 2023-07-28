@@ -6,7 +6,7 @@ public class Life
 
     private PointF position;
     private Size size;
-    private bool debug = true;
+    private bool debug = false;
 
     public Life(Size screenSize, int player)
     {

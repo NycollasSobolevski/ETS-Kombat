@@ -26,10 +26,10 @@ public class FightForm
 
         Background bg = new Background("Assets/Background/RandomParking.jpg", new SizeF(0, 0));
 
-        Ruyviu figther1 = new Ruyviu(new PointF(400, 2000), 1000);
+        Kaqui figther1 = new Kaqui(new PointF(400, 2000), 1000);
         all_entities.Add(figther1);
 
-        Kaqui fighter2 = new Kaqui(new PointF(800, 2000), 1000);
+        Ruyviu fighter2 = new Ruyviu(new PointF(800, 2000), 1000);
         all_entities.Add(fighter2);
 
         figther1.Enemy = fighter2;

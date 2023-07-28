@@ -21,13 +21,12 @@ public abstract class Fighter : Entity
     public RectangleF Rectangle {
         get {
             return new RectangleF(
-                Position.X + Frame.OriginPoint.X,
-                Position.Y - Frame.OriginPoint.Y,
+                Position.X + this.Frame.OriginPoint.X,
+                Position.Y,
                 Size.Width,
                 Size.Height
             );
         }
-        private set{ }
     }
     protected DateTime lastFrame = DateTime.Now;
     protected int AnimationTimer { get; set; } = 300;
@@ -39,6 +38,7 @@ public abstract class Fighter : Entity
     public string Name { get; set; }
     public Life HealthPoints { get; set; }
     public int Hp = 1000;
+    private int power { get; set; } = 80;
     #endregion
     public Fighter(PointF initialPosition, int health)
     {
@@ -185,15 +185,15 @@ public abstract class Fighter : Entity
                 5
             )
         );
-        g.FillRectangle(
-            Brushes.Aqua,
-            new RectangleF(
-                this.Position.X + this.Size.Width - 50,
-                this.Position.Y - this.Size.Height,
-                this.Rectangle.Width,
-                this.Rectangle.Height
-            )
-        );
+        // g.FillRectangle(
+        //     Brushes.Aqua,
+        //     new RectangleF(
+        //         this.Position.X + this.Size.Width - 50,
+        //         this.Position.Y - this.Size.Height,
+        //         this.Rectangle.Width,
+        //         this.Rectangle.Height
+        //     )
+        // );
         if (Frame.HitBox != null)
             g.DrawRectangle(
                 Pens.Red,
@@ -243,11 +243,18 @@ public abstract class Fighter : Entity
             $"State: {this.CurrentState}",
             new Font("arial", 10),
             Brushes.Black,
-            new PointF(this.Direction == FighterDirection.RIGHT ? 0 : ScreenSize.Width - 300, 0)
+            new PointF(this.Direction == FighterDirection.RIGHT ? 0 : ScreenSize.Width - 150, 0)
         );        
     }
+
     public virtual void Update(Graphics g, DateTime t)
     {
+        if (this.Hp <= 0 )
+        {
+            MessageBox.Show($"O player: {Enemy.Name} ganhou!", "FIM DE JOGO", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+            Application.Exit();
+        }
+
         var container = g.BeginContainer();
         Move(t);
         this.UpdateAnimation(t);
@@ -268,17 +275,34 @@ public abstract class Fighter : Entity
             this.Frame.HurtBox.Height
         );
 
-        // this.Frame.HitBox = new RectangleF(
-        //     Rectangle.X + Frame.OriginPoint.X + Frame.HitBox.X,
-        //     Rectangle.Y + Frame.OriginPoint.Y - Frame.HitBox.Y,
-        //     this.Frame.HitBox.Width,
-        //     this.Frame.HitBox.Height
-        // );
+        var posX = Direction == 
+                FighterDirection.RIGHT? Frame.HitboxPosition.X + Frame.OriginPoint.X :
+                -Frame.HitboxPosition.X - Frame.OriginPoint.X;
 
-        if (this.Frame.HitBox.IntersectsWith(Enemy.Frame.HurtBox))
-            Enemy.Hp -= 100;
+        this.Frame.HitBox = new RectangleF(
+            Rectangle.X + posX,
+            Rectangle.Y + Frame.OriginPoint.Y + Frame.HitboxPosition.Y - Size.Height,
+            this.Frame.HitBox.Width,
+            this.Frame.HitBox.Height
+        );
+        
+
+        
+        if (
+            this.Frame.HitBox.IntersectsWith(Enemy.Frame.HurtBox) &&
+            this.Frame.HitBox.X != 0 &&
+            this.Frame.HitBox.Y != 0 &&
+            this.Frame.HitBox.Width != 0 &&
+            this.Frame.HitBox.Height != 0
+        )
+        {
+
+            if (this.CurrentState == States.LightKick || this.CurrentState == States.LightPunch )
+                Enemy.Hp -= 1;
+            if (this.CurrentState == States.MediumKick || this.CurrentState == States.MediumPunch )
+                Enemy.Hp -= 5;
+        }
     }
-    
     
     # region SpriteDirection
         public void UpdateStageConstraints()
@@ -289,9 +313,9 @@ public abstract class Fighter : Entity
             if (this.Position.X < 0 + Stage.FIGHTER_WIDTH)
                 this.Position = new PointF(Stage.FIGHTER_WIDTH, this.Position.Y);
             
-            if (this.Position.Y > this.ScreenSize.Height - Stage.STAGE_FLOOR)
+            if (this.Position.Y > this.ScreenSize.Height - Stage.STAGE_FLOOR - this.Frame.OriginPoint.Y)
             {
-                this.Position = new Point((int)this.Position.X, this.ScreenSize.Height - Stage.STAGE_FLOOR);
+                this.Position = new Point((int)this.Position.X, this.ScreenSize.Height - Stage.STAGE_FLOOR - this.Frame.OriginPoint.Y);
                 this.CurrentState = States.Idle;
             }
                 

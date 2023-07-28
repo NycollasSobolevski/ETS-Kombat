@@ -7,6 +7,7 @@ public class Kaqui : Fighter
     public Kaqui ( PointF inititalPosition, int hp) : base(inititalPosition, hp)
     {
         this.Image = new Bitmap ("./Assets/Sprites/Kaqui.png");
+        this.Name = "Kaciqe Kaki";
     }
 
     protected override void setFrames()
@@ -327,17 +328,29 @@ public class Kaqui : Fighter
     {
         Frames[States.LightPunch][1].HitBox = 
             new RectangleF( 50, 30, 60, 20);
+        
+        Frames[States.LightPunch][1].HitboxPosition = 
+            new PointF( -20, 50 );
 
         Frames[States.MediumPunch][2].HitBox = 
             new RectangleF( 70, 20, 30, 50);
+        Frames[States.MediumPunch][2].HitboxPosition =
+            new PointF(20, 20);
+
         Frames[States.MediumPunch][3].HitBox = 
             new RectangleF( 90, 20, 30, 50);
+        Frames[States.MediumPunch][3].HitboxPosition =
+            new PointF(20, 20); 
 
         Frames[States.LightKick][2].HitBox =
             new RectangleF( 90, 75, 95, 55);
+        Frames[States.LightKick][2].HitboxPosition =
+            new PointF(-200, 80); 
 
         Frames[States.MediumKick][2].HitBox =
-            new RectangleF( 0, 0, 50, 50);
+            new RectangleF( 0, 0, 90, 50);
+        Frames[States.MediumKick][2].HitboxPosition =
+            new PointF(30, 75); 
     }
 
     #endregion
@@ -345,11 +358,10 @@ public class Kaqui : Fighter
     {
         g.DrawImage(this.Image, new RectangleF(
             this.Position.X + this.Size.Width - 50,
-            this.Position.Y - this.Size.Height,
+            this.Position.Y + this.Size.Height,
             this.Frame.Size.Width, this.Frame.Size.Height
         ), this.Frame.ToRectangle(), GraphicsUnit.Pixel);
     }
-
     public override void DrawDebug(Graphics g)
     {
         base.DrawDebug(g);
